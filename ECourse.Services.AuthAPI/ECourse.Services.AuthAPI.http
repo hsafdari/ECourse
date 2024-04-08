@@ -1,0 +1,6 @@
+@ECourse.Services.AuthAPI_HostAddress = http://localhost:5258
+
+GET {{ECourse.Services.AuthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
