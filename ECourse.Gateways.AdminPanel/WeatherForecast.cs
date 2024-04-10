@@ -1,4 +1,4 @@
-namespace ECourse.Services.CourseAPI
+namespace ECourse.Gateways.AdminPanel
 {
     public class WeatherForecast
     {

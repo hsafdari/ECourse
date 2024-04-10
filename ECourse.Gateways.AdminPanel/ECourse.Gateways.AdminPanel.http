@@ -1,0 +1,6 @@
+@ECourse.Gateways.AdminPanel_HostAddress = http://localhost:5195
+
+GET {{ECourse.Gateways.AdminPanel_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

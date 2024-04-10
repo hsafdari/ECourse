@@ -1,0 +1,6 @@
+@ECourse.Gateways.Frontend_HostAddress = http://localhost:5070
+
+GET {{ECourse.Gateways.Frontend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
