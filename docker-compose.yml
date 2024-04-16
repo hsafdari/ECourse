@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  ecourse.services.courseapi:
+    image: ${DOCKER_REGISTRY-}ecourseservicescourseapi
+    build:
+      context: .
+      dockerfile: ECourse.Services.CourseAPI/Dockerfile

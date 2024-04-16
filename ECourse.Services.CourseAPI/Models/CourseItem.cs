@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using Middleware.Models;
 
 namespace ECourse.Services.CourseAPI.Models
 {

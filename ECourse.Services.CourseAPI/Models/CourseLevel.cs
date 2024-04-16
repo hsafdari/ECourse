@@ -1,4 +1,5 @@
-﻿namespace ECourse.Services.CourseAPI.Models
+﻿using Middleware.Models;
+namespace ECourse.Services.CourseAPI.Models
 {
     public class CourseLevel:BaseEntity
     {

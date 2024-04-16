@@ -19,19 +19,21 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "uis", "uis", "{C413BE56-A48
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.AuthAPI", "ECourse.Services.AuthAPI\ECourse.Services.AuthAPI.csproj", "{E66AADCC-5C59-4417-A53B-94FDCADD6C79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Services.OrderAPI", "ECourse.Services.OrderAPI\ECourse.Services.OrderAPI.csproj", "{0B74E97F-ED93-46B4-B31D-FCFFC73C8663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.OrderAPI", "ECourse.Services.OrderAPI\ECourse.Services.OrderAPI.csproj", "{0B74E97F-ED93-46B4-B31D-FCFFC73C8663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Services.BlogAPI", "ECourse.Services.BlogAPI\ECourse.Services.BlogAPI.csproj", "{B46D8B38-B93C-40C8-A9F9-B15E2980ACD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.BlogAPI", "ECourse.Services.BlogAPI\ECourse.Services.BlogAPI.csproj", "{B46D8B38-B93C-40C8-A9F9-B15E2980ACD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Services.CourseAPI", "ECourse.Services.CourseAPI\ECourse.Services.CourseAPI.csproj", "{E541EDF0-350F-4C43-B649-F31A5A48C6DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.CourseAPI", "ECourse.Services.CourseAPI\ECourse.Services.CourseAPI.csproj", "{E541EDF0-350F-4C43-B649-F31A5A48C6DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.uis.AdminPanel", "ECourse.uis.AdminPanel\ECourse.uis.AdminPanel.csproj", "{8EAD40E4-22CF-4501-81CE-A28DDFA02F5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.uis.AdminPanel", "ECourse.uis.AdminPanel\ECourse.uis.AdminPanel.csproj", "{8EAD40E4-22CF-4501-81CE-A28DDFA02F5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Gateways.Frontend", "ECourse.Gateways.Frontend\ECourse.Gateways.Frontend.csproj", "{CE311B97-529E-411F-A7E8-112D2ED6DE25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Gateways.Frontend", "ECourse.Gateways.Frontend\ECourse.Gateways.Frontend.csproj", "{CE311B97-529E-411F-A7E8-112D2ED6DE25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Gateways.AdminPanel", "ECourse.Gateways.AdminPanel\ECourse.Gateways.AdminPanel.csproj", "{37186CCE-2570-45B9-87CB-C2EAE9741B4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Gateways.AdminPanel", "ECourse.Gateways.AdminPanel\ECourse.Gateways.AdminPanel.csproj", "{37186CCE-2570-45B9-87CB-C2EAE9741B4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Middlewares.Middleware", "ECourse.Middlewares.Middleware\ECourse.Middlewares.Middleware.csproj", "{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware", "ECourse.Middlewares.Middleware\Middleware.csproj", "{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B64BF0D5-FABD-4E16-8D8F-05202BC63006}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

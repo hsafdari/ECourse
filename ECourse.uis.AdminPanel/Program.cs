@@ -20,4 +20,8 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+//builder.UseStartup<Startup>();
+
+builder.Build().Run();
 app.Run();
+
