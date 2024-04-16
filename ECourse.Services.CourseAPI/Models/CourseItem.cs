@@ -6,6 +6,7 @@ namespace ECourse.Services.CourseAPI.Models
 {
     public class CourseItem:BaseEntity
     {
+        public static readonly string DocumentName = nameof(CourseItem);
         public required string Name { get; set; }
         /// <summary>
         /// if user didn't buy course it shows if enable

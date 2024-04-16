@@ -7,6 +7,7 @@ namespace ECourse.Services.CourseAPI.Models
     /// </summary>
     public class CoursePrice:BaseEntity
     {
+        public static readonly string DocumentName = nameof(CoursePrice);
         public decimal Price { get; set; }
         public required string  CurrencyCode { get; set;}
         public required string CourseId { get; set; }
