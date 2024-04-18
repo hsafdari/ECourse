@@ -1,0 +1,57 @@
+﻿@page "/courselevel/index"
+@using ECourse.Admin.Models
+@using ECourse.Admin.Models.CourseAPI.CourseLevel
+@using ECourse.Admin.Service.CourseAPI;
+@using System.Text.Json
+@using Newtonsoft.Json
+@inject ICourseLevelService _courseLevelService;
+
+@attribute [StreamRendering]
+
+<PageTitle>CourseType</PageTitle>
+
+<h1>Course Types</h1>
+
+<p>This component demonstrates showing data.</p>
+
+@if (items == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Create</th>
+                <th>Modified</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Title</td>
+                    <td>@item.CreateDateTime</td>
+                    <td>@item.ModifiedDateTime</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    List<CourseLevelDto> items = new();
+    protected override async Task OnInitializedAsync()
+    {
+        var response=await _courseLevelService.GetAllAsync();
+        if (response!=null && response.IsSuccess)
+        {
+           
+            items = JsonConvert.DeserializeObject<List<CourseLevelDto>>(Convert.ToString(response.Result));
+        }
+        
+    }
+}
