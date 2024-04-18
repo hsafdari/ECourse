@@ -21,4 +21,10 @@
     <ProjectReference Include="..\ECourse.Middlewares.Middleware\Middleware.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\Dto\CourseItem\" />
+    <Folder Include="Models\Dto\CoursePrice\" />
+    <Folder Include="Models\Dto\CourseSection\" />
+  </ItemGroup>
+
 </Project>

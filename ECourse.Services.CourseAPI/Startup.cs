@@ -32,6 +32,7 @@ public class Startup(IConfiguration configuration)
         });
         services.AddSingleton<ICourseRepository>(sp =>
         new CourseRepository(sp.GetService<IMongoDatabase>() ?? throw new Exception("IMongoDatabase not found"), Course.DocumentName));
+        services.AddSingleton<ICourseLevelRepository>(sp=>new CourseLevelRepository(sp.GetService<IMongoDatabase>() ?? throw new Exception("IMongoDatabase not found"), CourseLevel.DocumentName));
     }
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
