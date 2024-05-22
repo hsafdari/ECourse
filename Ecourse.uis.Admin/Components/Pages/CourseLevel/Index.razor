@@ -2,56 +2,78 @@
 @using ECourse.Admin.Models
 @using ECourse.Admin.Models.CourseAPI.CourseLevel
 @using ECourse.Admin.Service.CourseAPI;
-@using System.Text.Json
 @using Newtonsoft.Json
-@inject ICourseLevelService _courseLevelService;
+@inject ICourseLevelService service;
+@rendermode InteractiveServer 
+<PageTitle>Course Level</PageTitle>
+<h1>Course Level</h1>
+<div class="container">
+    <div class="col-md-4"><RadzenButton class="btn btn-success">Create</RadzenButton></div>
+    <div class="col-md-4"><RadzenButton class="btn btn-primary">Edit</RadzenButton></div>
+    <div class="col-md-4"><RadzenButton class="btn btn-close">Remove</RadzenButton></div>
+</div>
+<RadzenDataGrid @ref="grid" @bind-Value=@selecteditems SelectionMode="DataGridSelectionMode.Multiple" KeyProperty="Id" IsLoading="@isLoading" Count="@count" Data="@items"
+                LoadData="@LoadData" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+    FilterMode="FilterMode.Advanced" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="4" 
+    PagerHorizontalAlign="HorizontalAlign.Center" ColumnWidth="200px">
+    <Columns>
+        <RadzenDataGridColumn Width="60px" Sortable="false" Filterable="false">
+           @*  <HeaderTemplate>
+                <RadzenCheckBox TriState="false" TValue="bool?" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select all items" }})"
+                                Value="@(selecteditems == null || selecteditems?.Any() != true ? false : !items.All(i => selecteditems.Select(e => e.Id).Contains(i.Id)) ? null : items.Any(i => selecteditems.Select(e => e.Id).Contains(i.Id)))"
+                                Change="@(args => selecteditems = args == true ? (selecteditems ?? Enumerable.Empty<CourseLevelDto>()).Union(items.Where(i => !(selecteditems ?? Enumerable.Empty<CourseLevelDto>()).Select(e => e.Id).Contains(i.Id))).ToList() : null)" />
+            </HeaderTemplate> *@
+            <Template Context="data">
+                <RadzenCheckBox TriState="false" Value="@(selecteditems != null && selecteditems.Select(e => e.Id).Contains(data.Id))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
+                                TValue="bool" />
+            </Template>
+        </RadzenDataGridColumn>        
+        <RadzenDataGridColumn Property="Title" Title="Title" Width="150px" />
+        <RadzenDataGridColumn Property="Icon" Title="Icon" Width="150px" />
+        <RadzenDataGridColumn Property="FileName" Width="150px" />
+        <RadzenDataGridColumn Property="FileLocation" Width="150px"/>
+        <RadzenDataGridColumn Property="CreateDateTime" Title="Create DateTime" FormatString="{0:d}" />
+        <RadzenDataGridColumn Property="ModifiedDateTime" Title="Modified DateTime" FormatString="{0:d}" />
+    
+            
+    </Columns>
+    <LoadingTemplate>
+        <RadzenProgressBarCircular ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
+    </LoadingTemplate>
+</RadzenDataGrid>
 
-@attribute [StreamRendering]
 
-<PageTitle>CourseType</PageTitle>
-
-<h1>Course Types</h1>
-
-<p>This component demonstrates showing data.</p>
-
-@if (items == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Create</th>
-                <th>Modified</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in items)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.Title</td>
-                    <td>@item.CreateDateTime</td>
-                    <td>@item.ModifiedDateTime</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
 @code {
-    List<CourseLevelDto> items = new();
+    IEnumerable<CourseLevelDto> items;
+    IList<CourseLevelDto> selecteditems;
+    RadzenDataGrid<CourseLevelDto> grid;
+    Query query = new();
+    bool isLoading = false;
+    int count = 0;
     protected override async Task OnInitializedAsync()
     {
-        var response=await _courseLevelService.GetAllAsync();
-        if (response!=null && response.IsSuccess)
-        {
-           
-            items = JsonConvert.DeserializeObject<List<CourseLevelDto>>(Convert.ToString(response.Result));
-        }
-        
+        await base.OnInitializedAsync();
+        // var response=await _courseLevelService.GetAllAsync();
+        // if (response!=null && response.IsSuccess)
+        // {
+
+        //     items = JsonConvert.DeserializeObject<List<CourseLevelDto>>(Convert.ToString(response.Result));                       
+        // }
+
+    }  
+    async Task LoadData(LoadDataArgs args)
+    {
+        isLoading = true;
+        query.Filter=args.Filter;
+        query.OrderBy=args.OrderBy;
+        query.Skip = args.Skip;
+        query.Top = args.Top;       
+        var response = await service.GetGrid(query);
+        // Update the Data property
+        items = JsonConvert.DeserializeObject<IEnumerable<CourseLevelDto>>(Convert.ToString(response.Result));
+        // Update the count
+        count = items.Count();
+
+        isLoading = false;
     }
 }

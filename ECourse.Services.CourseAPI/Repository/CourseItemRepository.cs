@@ -6,8 +6,10 @@ namespace ECourse.Services.CourseAPI.Repository
 {
     public class CourseItemRepository : BaseRepository<CourseItem>, ICourseItemRepository
     {
-        public CourseItemRepository(IMongoDatabase db, string documentname) : base(db, documentname)
+        readonly DataContext _dbContext;
+        public CourseItemRepository(DataContext db, string documentname) : base(db, documentname)
         {
+            _dbContext = db;
         }
     }
 }

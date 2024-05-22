@@ -1,10 +1,13 @@
-﻿using Middleware.Models;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using Middleware.Models;
 
 namespace ECourse.Services.CourseAPI.Models.Dto.CourseLevel
 {
     public class CourseLevelDto:BaseDto
     {
-        public required string Title { get; set; }
-        public required string Icon { get; set; }
+        public string Title { get; set; } = default!;
+        public string Icon { get; set; } = default!;
+        public string FileName { get; set; } = default!;
+        public string FileLocation { get; set; } = default!;
     }
 }

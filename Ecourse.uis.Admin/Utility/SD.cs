@@ -19,6 +19,7 @@
 
         public static string CourseAPIBase { get; internal set; }
         public static string TokenCookie { get; internal set; }
+        public static FileUploadMode UploadMode { get; internal set; }
 
         public enum ContentType
         {

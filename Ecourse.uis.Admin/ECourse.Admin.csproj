@@ -11,7 +11,27 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentFTP" Version="50.0.1" />
+    <PackageReference Include="MudBlazor" Version="6.19.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Radzen.Blazor" Version="4.31.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\CourseLevel\Form.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Components\Pages\CourseLevel\Edit.razor" />
+    <_ContentIncludedByDefault Remove="Components\Pages\CourseLevel\Form.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Components\Pages\CourseLevel\Edit.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Components\Pages\CourseLevel\Edit.razor" />
   </ItemGroup>
 
 </Project>

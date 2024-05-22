@@ -1,4 +1,5 @@
 ﻿using ECourse.Admin.Models;
+using Radzen;
 
 namespace ECourse.Admin.Service
 {
@@ -9,5 +10,6 @@ namespace ECourse.Admin.Service
         Task<ResponseDto?> GetByIdAsync(string id);
         Task<ResponseDto?> UpdateAsync(TModel entity);
         Task<ResponseDto?> DeleteAsync(string id);
+        Task<ResponseDto?> GetGrid(Query query);
     }
 }

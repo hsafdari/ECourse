@@ -6,7 +6,7 @@ namespace ECourse.Services.CourseAPI.Repository
 {
     public class CourseSectionRepository : BaseRepository<CourseSection>, ICourseSectionRepository
     {
-        public CourseSectionRepository(IMongoDatabase db, string documentname) : base(db, documentname)
+        public CourseSectionRepository(DataContext db, string documentname) : base(db, documentname)
         {
         }
     }

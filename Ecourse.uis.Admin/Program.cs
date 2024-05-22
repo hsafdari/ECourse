@@ -2,6 +2,9 @@ using ECourse.Admin.Service;
 using ECourse.Admin.Service.CourseAPI;
 using ECourse.Admin.Utility;
 using ECourse.Admin.Components;
+using MudBlazor.Services;
+using ECourse.Admin.Service.FilesManager;
+using Radzen;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,8 +14,14 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICourseLevelService, CourseLevelService>();
+builder.Services.AddScoped<IAlertService, AlertService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IFTPService, FTPService>();
+builder.Services.AddScoped<IFileManagerService, FileManagerService>();
+builder.Services.AddMudServices();
+builder.Services.AddRadzenComponents();
 SD.CourseAPIBase = builder.Configuration["ServiceUrls:CourseAPI"];
+SD.UploadMode =(FileUploadMode) Enum.Parse(typeof(FileUploadMode),builder.Configuration["FileUploadMode"]);
 builder.Services.AddScoped<ICourseLevelService, CourseLevelService>();
 var app = builder.Build();
 

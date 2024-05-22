@@ -1,0 +1,81 @@
+﻿@using static ECourse.Admin.Utility.SD
+@inject NavigationManager navManager
+@inject IFileManagerService _FileManagerService
+
+<EditForm FormName="courselevelentry" Context="AddForm" id="frm" Model="model" OnValidSubmit="OnValidSubmit" loading="@loading" class="container">
+    <DataAnnotationsValidator />
+    <ValidationSummary></ValidationSummary>
+    <h2 class="card-title">Course Level Management</h2>
+    <h3>@PageTitle</h3>
+    <div class="container-fluid pb-15">
+        <div class="mb-3 row">            
+            <RadzenTextBox id="txtTitle" @bind-Value="@model.Title" Label="Title" Variant="Variant.Text"></RadzenTextBox>
+        </div>
+        <div class="mb-3 row ">
+            <div class="col-md-4">
+                <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles"> 
+                    <ButtonTemplate Context="fileInput">
+                        <MudButton HtmlTag="label"
+                                   Variant="MudBlazor.Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                   for="@fileInput">
+                            Upload Icon
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>                
+            </div>
+            <div class="col-md-4">
+                <img src="@model.Icon" style="width:50px;height:50px" />
+            </div>
+        </div>
+        @if(loading)
+        {
+            <div class="d-flex align-items-center">
+                <strong>Loading...</strong>
+                <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+            </div>
+        }
+       
+    </div>
+    <div class="row mb-2 fixed-bottom d-flex justify-content-center">
+        <div class="col-md-12 text-center">           
+            <RadzenButton Disabled=@loading Class="col-md-2" ButtonType="Radzen.ButtonType.Submit" Variant="Radzen.Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save">@ButtonText</RadzenButton>
+            <RadzenButton Class="col-md-2" Variant="Radzen.Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Click="BackToindex">Cancel</RadzenButton>
+        </div>
+    </div>
+</EditForm>
+@code {
+    [Parameter]
+    public string PageTitle { get; set; }
+    [Parameter]
+    public CourseLevelDto model { get; set; }
+    [Parameter]
+    public string ButtonText { get; set; } = "save";
+    [Parameter]
+    public bool loading { get; set; }
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+    private async void UploadFiles(IBrowserFile file)
+    {
+        loading = true;
+        var result = await _FileManagerService.UploadFileAsync(file, "CourseLevel", model.FileLocation);
+        if (result.IsSuccess)
+        {
+            if (result.Result != null)
+            {
+                string[] items = result.Result.ToString().Split(";");
+                model.FileName = file.Name;
+                model.FileLocation = items[0];
+                model.Icon = items[1];
+
+            }            
+        }        
+        loading = false;
+        StateHasChanged();
+    }
+    async Task BackToindex()
+    {
+        navManager.NavigateTo("/courselevel/index");
+    }
+}

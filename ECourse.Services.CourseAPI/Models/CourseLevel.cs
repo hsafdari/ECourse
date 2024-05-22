@@ -9,6 +9,8 @@ namespace ECourse.Services.CourseAPI.Models
         public static readonly string DocumentName = nameof(CourseLevel);
         public required string Title { get; set; }
         public required string Icon { get; set; }
-        public List<Course> Courses { get; init; } = null!;
+        public string FileName { get; set; } = string.Empty;
+        public string FileLocation { get; set; } = string.Empty;
+        // public List<Course> Courses { get; init; } = null!;
     }
 }

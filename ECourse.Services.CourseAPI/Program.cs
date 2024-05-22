@@ -1,8 +1,11 @@
+using AutoMapper;
 using ECourse.Services.CourseAPI;
+using MongoDB.Driver;
 using Serilog;
 using Serilog.Events;
 
 var builder = Host.CreateDefaultBuilder(args)
+
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
         config

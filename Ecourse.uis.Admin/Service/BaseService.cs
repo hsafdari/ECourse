@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Text.Json;
+﻿using ECourse.Admin.Models;
+using ECourse.Admin.Utility;
+using Microsoft.AspNetCore.Components.Forms;
+using Newtonsoft.Json;
+using Radzen;
+using System;
+using System.Diagnostics;
 using System.Net;
 using System.Text;
+using System.Text.Encodings.Web;
 using static ECourse.Admin.Utility.SD;
-using ECourse.Admin.Models.CourseAPI.CourseLevel;
-using Newtonsoft.Json;
-using ECourse.Admin.Models;
 
 namespace ECourse.Admin.Service
 {
@@ -13,37 +16,14 @@ namespace ECourse.Admin.Service
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ITokenProvider _tokenProvider;
-        protected string _apiUrl { get; set; }
+        
+        protected string ApiUrl { get; set; } = string.Empty;
         public BaseService(IHttpClientFactory httpClientFactory, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
             _tokenProvider = tokenProvider;
 
         }
-        public async Task<ResponseDto?> CreateAsync(TModel entity)
-        {
-            return await SendAsync(new RequestDto()
-            {
-                ApiType = ApiType.POST,
-                Data = entity,
-                Url = _apiUrl,
-                ContentType = ContentType.MultipartFormData
-            });
-        }
-
-        public async Task<ResponseDto?> DeleteAsync(string id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<ResponseDto?> GetByIdAsync(string id)
-        {
-            return await SendAsync(new RequestDto()
-            {
-                Url = _apiUrl + "/{id}"
-            });
-        }
-
         private async Task<ResponseDto?> SendAsync(RequestDto requestDto, bool withBearer = false)
         {
             try
@@ -74,17 +54,25 @@ namespace ECourse.Admin.Service
                     foreach (var prop in requestDto.Data.GetType().GetProperties())
                     {
                         var value = prop.GetValue(requestDto.Data);
-                        if (value is FormFile)
+                        // if (value is FormFile) 
+                        if (value is IBrowserFile)
                         {
-                            var file = (FormFile)value;
+                            var file = (IBrowserFile)value;
                             if (file != null)
                             {
-                                content.Add(new StreamContent(file.OpenReadStream()), prop.Name, file.FileName);
+                                content.Add(new StreamContent(file.OpenReadStream()), prop.Name, file.Name);
                             }
                         }
                         else
                         {
-                            content.Add(new StringContent(value == null ? "" : value.ToString()), prop.Name);
+                            if (value == null)
+                            {
+                                content.Add(new StringContent(""), prop.Name);
+                            }
+                            else
+                            {
+                                content.Add(new StringContent(Convert.ToString(value)), prop.Name);
+                            }
                         }
                     }
                     message.Content = content;
@@ -96,24 +84,14 @@ namespace ECourse.Admin.Service
                         message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
                     }
                 }
-                HttpResponseMessage? apiResponse = null;
-
-                switch (requestDto.ApiType)
+                message.Method = requestDto.ApiType switch
                 {
-                    case ApiType.POST:
-                        message.Method = HttpMethod.Post;
-                        break;
-                    case ApiType.DELETE:
-                        message.Method = HttpMethod.Delete;
-                        break;
-                    case ApiType.PUT:
-                        message.Method = HttpMethod.Put;
-                        break;
-                    default:
-                        message.Method = HttpMethod.Get;
-                        break;
-                }
-
+                    ApiType.POST => HttpMethod.Post,
+                    ApiType.DELETE => HttpMethod.Delete,
+                    ApiType.PUT => HttpMethod.Put,
+                    _ => HttpMethod.Get,
+                };
+                HttpResponseMessage? apiResponse = null;
                 apiResponse = await client.SendAsync(message);
 
                 switch (apiResponse.StatusCode)
@@ -142,17 +120,86 @@ namespace ECourse.Admin.Service
                 return dto;
             }
         }
+        public async Task<ResponseDto?> CreateAsync(TModel entity)
+        {
+            return await SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.POST,
+                Data = entity,
+                Url = ApiUrl,
+                ContentType = ContentType.MultipartFormData
+            });
+        }
 
+        public async Task<ResponseDto?> DeleteAsync(string id)
+        {
+            return await SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.DELETE,
+                Url = ApiUrl + "/{id}"
+            });
+        }
+
+        public async Task<ResponseDto?> GetByIdAsync(string id)
+        {
+            return await SendAsync(new RequestDto()
+            {
+                Url = ApiUrl + "/{id}"
+            });
+        }
         public async Task<ResponseDto?> UpdateAsync(TModel entity)
         {
-            throw new NotImplementedException();
+            return await SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.PUT,
+                Data = entity,
+                Url = ApiUrl,
+                ContentType = ContentType.MultipartFormData
+            });
         }
         public async Task<ResponseDto?> GetAllAsync()
         {
             return await SendAsync(new RequestDto()
             {
-                Url = _apiUrl
+                Url = ApiUrl
             });
+        }
+        public async Task<ResponseDto?> GetGrid(Query query)
+        {
+            return await SendAsync(new RequestDto()
+            {
+                //Url = ApiUrl + $"/Grid?&filter={query.Filter}&top={query.Top}&skip={query.Skip}&orderby={query.OrderBy}"
+                Url = gridfilterurl(ApiUrl + $"/Grid", query)
+            });
+        }
+        public string gridfilterurl(string url,Query query)
+        {
+            Dictionary<string, object> dictionary = new Dictionary<string, object>();
+            if (query.Skip.HasValue)
+            {
+                dictionary.Add("skip", query.Skip.Value);
+            }
+
+            if (query.Top.HasValue)
+            {
+                dictionary.Add("top", query.Top.Value);
+            }
+
+            if (!string.IsNullOrEmpty(query.OrderBy))
+            {
+                dictionary.Add("orderBy", query.OrderBy);
+            }
+
+            if (!string.IsNullOrEmpty(query.Filter))
+            {
+                dictionary.Add("filter", UrlEncoder.Default.Encode(query.Filter));
+            }
+            if (!string.IsNullOrEmpty(query.Select))
+            {
+                dictionary.Add("select", query.Select);
+            }
+
+            return string.Format("{0}{1}", url, dictionary.Any() ? ("?" + string.Join("&", dictionary.Select((KeyValuePair<string, object> a) => $"{a.Key}={a.Value}"))) : "");
         }
     }
 }
