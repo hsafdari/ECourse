@@ -23,6 +23,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build ../../ECourse.sln --no-restore
+      working-directory: github.workspace
+      run: dotnet build ECourse.sln --no-restore
     - name: Test
-      run: dotnet test ../../ECourse.sln --no-build --verbosity normal
+      run: dotnet test ECourse.sln --no-build --verbosity normal
