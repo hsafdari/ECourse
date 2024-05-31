@@ -1,5 +1,5 @@
-﻿using ECourse.Services.CourseAPI.Models;
-using ECourse.Services.CourseAPI.Repository;
+﻿using ECourse.Services.CourseAPI.Interfaces;
+using ECourse.Services.CourseAPI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;

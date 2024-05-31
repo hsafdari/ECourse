@@ -9,10 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Repository\CourseItemRepository.cs" />
-    <Compile Remove="Repository\CoursePriceRepository.cs" />
-    <Compile Remove="Repository\CourseRepository.cs" />
-    <Compile Remove="Repository\CourseSectionRepository.cs" />
+    <Compile Remove="Repositories\CourseItemRepository.cs" />
+    <Compile Remove="Repositories\CoursePriceRepository.cs" />
+    <Compile Remove="Repositories\CourseRepository.cs" />
+    <Compile Remove="Repositories\CourseSectionRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,13 +26,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ECourse.Middlewares.Middleware\Middleware.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Models\Dto\CourseItem\" />
     <Folder Include="Models\Dto\CoursePrice\" />
     <Folder Include="Models\Dto\CourseSection\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

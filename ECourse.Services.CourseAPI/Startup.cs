@@ -1,9 +1,10 @@
 ﻿
 using AutoMapper;
-using ECourse.Services.CourseAPI.Repository;
+using ECourse.Services.CourseAPI.Interfaces;
+using ECourse.Services.CourseAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Middleware;
+
 
 namespace ECourse.Services.CourseAPI;
 
@@ -12,8 +13,9 @@ public class Startup(IConfiguration configuration)
     // This method gets called by the runtime. Use this method to add services to the container.
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddControllers();        
-        services.AddDbContextFactory<DataContext>(op => 
+        services.AddControllers();
+        services.AddHealthChecks();
+        services.AddDbContextFactory<ApplicationDataContext>(op => 
         op.UseMongoDB(configuration.GetSection("mongo")
         .GetSection("connectionString").Value, 
         configuration.GetSection("mongo")
@@ -56,6 +58,7 @@ public class Startup(IConfiguration configuration)
         app.UseCors("AllowAll");
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapHealthChecks("/healthcheck");
             endpoints.MapControllers();
         });
     }

@@ -13,8 +13,8 @@ namespace ECourse.Services.CourseAPI.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        readonly IDbContextFactory<DataContext> _dbContext;
-        public TestController(IDbContextFactory<DataContext> dataContext)
+        readonly IDbContextFactory<ApplicationDataContext> _dbContext;
+        public TestController(IDbContextFactory<ApplicationDataContext> dataContext)
         {
             _dbContext = dataContext;
         }

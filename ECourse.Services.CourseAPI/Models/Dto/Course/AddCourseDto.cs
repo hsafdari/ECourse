@@ -1,4 +1,4 @@
-﻿using Middleware.Models;
+﻿using Infrastructure.Models;
 
 namespace ECourse.Services.CourseAPI.Models.Dto.Course
 {

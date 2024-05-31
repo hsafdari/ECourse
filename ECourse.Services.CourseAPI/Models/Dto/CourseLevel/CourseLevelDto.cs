@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Forms;
-using Middleware.Models;
+using Infrastructure.Models;
 
 namespace ECourse.Services.CourseAPI.Models.Dto.CourseLevel
 {

@@ -1,6 +1,7 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
-using Middleware.Models;
+using Infrastructure.Models;
+using ECourse.Services.CourseAPI.Enums;
 
 namespace ECourse.Services.CourseAPI.Models
 {
@@ -30,13 +31,5 @@ namespace ECourse.Services.CourseAPI.Models
         public CourseType CourseType { get; set; }     
     }
 
-    public enum CourseType
-    {
-        [BsonRepresentation(BsonType.String)]
-        video =0,
-        [BsonRepresentation(BsonType.String)]
-        article =1,
-        [BsonRepresentation(BsonType.String)]
-        content =2
-    }
+   
 }

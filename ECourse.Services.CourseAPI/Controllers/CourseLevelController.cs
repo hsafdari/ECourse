@@ -1,14 +1,12 @@
 ﻿using AutoMapper;
+using ECourse.Services.CourseAPI.Interfaces;
 using ECourse.Services.CourseAPI.Models;
 using ECourse.Services.CourseAPI.Models.Dto.CourseLevel;
-using ECourse.Services.CourseAPI.Repository;
 using Microsoft.AspNetCore.Mvc;
-using Middleware.Models;
-using Middleware.Utility;
+using Microsoft.AspNetCore.OutputCaching;
+using Infrastructure.Models;
+using Infrastructure.Utility;
 using MongoDB.Bson;
-using MongoDB.Bson.IO;
-//using MongoDB.Driver;
-using System.Web;
 
 namespace ECourse.Services.CourseAPI.Controllers
 {
@@ -26,7 +24,7 @@ namespace ECourse.Services.CourseAPI.Controllers
             _responseDto = new ResponseDto();
             _mapper = mapper;
         }
-        [HttpGet]
+        [HttpGet]        
         public async Task<ResponseDto> Get()
         {
             try
