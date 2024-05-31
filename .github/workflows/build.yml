@@ -21,4 +21,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Build
-      run: dotnet build
+      run: dotnet build ECourse.sln --no-restore
+    - name: Test
+      run: dotnet test ECourse.sln --no-build --verbosity normal
