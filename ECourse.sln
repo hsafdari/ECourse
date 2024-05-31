@@ -40,7 +40,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Admin", "Ecourse.ui
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.CourseAPI.Tests", "Test\ECourse.Services.CourseAPI.Tests\ECourse.Services.CourseAPI.Tests.csproj", "{2DF31D77-6750-4AED-A7D8-E886CDCFE635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
