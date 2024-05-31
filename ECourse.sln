@@ -38,9 +38,9 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Admin", "Ecourse.uis.Admin\ECourse.Admin.csproj", "{9B6033DB-C0B2-48EE-9166-CBCE92474800}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.CourseAPI.Tests", "..\Test\ECourse.Services.CourseAPI.Tests\ECourse.Services.CourseAPI.Tests.csproj", "{2DF31D77-6750-4AED-A7D8-E886CDCFE635}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.CourseAPI.Tests", "Test\ECourse.Services.CourseAPI.Tests\ECourse.Services.CourseAPI.Tests.csproj", "{2DF31D77-6750-4AED-A7D8-E886CDCFE635}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "..\Infrastructure\Infrastructure.csproj", "{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
