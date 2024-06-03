@@ -12,6 +12,10 @@ on:
 jobs:
   build:
 
+    env:
+        BUILD_CONFIG: 'Release'
+        SOLUTION: 'ECourse.sln'
+
     runs-on: ubuntu-latest
 
     steps:
@@ -23,6 +27,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test ECourse.Services.CourseAPI.Tests.csproj --no-build --verbosity normal
