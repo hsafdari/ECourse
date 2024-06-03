@@ -29,4 +29,4 @@ jobs:
     - name: Build
       run: dotnet build $SOLUTION --configuration $BUILD_CONFIG --no-restore
     - name: Test
-      run: dotnet test ECourse.Services.CourseAPI.Tests.csproj --no-build --verbosity normal
+      run: bash .github/runtests.sh
