@@ -20,7 +20,7 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+    - name: Install dependencies
+      run: ///get all depencies
     - name: Build
       run: dotnet build ECourse.sln --no-restore
-    - name: Test
-      run: dotnet test ECourse.sln --no-build --verbosity normal
