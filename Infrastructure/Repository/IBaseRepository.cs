@@ -7,11 +7,22 @@ namespace Infrastructure.Repository
     {
         Task<int> Create(TModel entity);
         Task<TModel> GetById(Expression<Func<TModel, bool>> where);
+        Task<List<TModel>> GetMany();
         Task<List<TModel>> GetMany(Expression<Func<TModel, bool>> where);
         Task<int> Update(TModel entity);
-        Task<int> Delete(TModel entity);
-        Task<int> DeleteMany(List<TModel> entities);
-        Task<List<TModel>> Grid(GridQuery query);
+        /// <summary>
+        /// remove a row temporary
+        /// </summary>
+        /// <param name="where">condition</param>
+        /// <returns></returns>
+        Task<int> Delete(Expression<Func<TModel, bool>> where);
+        /// <summary>
+        /// remove rows temporary
+        /// </summary>
+        /// <param name="where">condition</param>
+        /// <returns></returns>
+        Task<int> DeleteMany(Expression<Func<TModel, bool>> where);
+        Task<(List<TModel>, int)> Grid(GridQuery query);
 
 
     }

@@ -132,10 +132,10 @@ namespace ECourse.Services.CourseAPI.Tests.Repositories
         public async Task Should_DeleteRow_CourseLevel()
         {
             var model = InsertFakeData();
-            _courseLevelRepository.Delete(model);
+            _courseLevelRepository.Delete(x=>x.Id==model.Id);
 
             var context = new ApplicationDataContext(_dbContextOptions);
-            var count = context.CourseLevels.Count();
+            var count = context.CourseLevels.Where(x=>x.IsDeleted==false).Count();
             Assert.Equal(0, count);
 
         }

@@ -21,7 +21,7 @@ namespace ECourse.Services.CourseAPI.Tests.Data
         {
             var entity = new CourseLevelDto
             {
-                Id = MongoDB.Bson.ObjectId.GenerateNewId(),
+                Id = MongoDB.Bson.ObjectId.GenerateNewId().ToString(),
                 Title = "Beginner1",
                 FileLocation = "/Uploads/Test/file.jpg",
                 Icon = "/Uploads/test1.jpg",

@@ -1,0 +1,33 @@
+﻿@page "/courselevel/create"
+@using ECourse.Admin.Service.CourseAPI
+@inject ICourseLevelService service;
+@inject NavigationManager navManager
+@inject NotificationService NotificationService;
+@rendermode InteractiveServer
+
+<Form pagetitle="Create New Item" model="@model" loading="@loading" OnValidSubmit="@Submit"></Form>
+@code {
+    public bool loading { get; set; } = false;
+    CourseLevelDto model = new CourseLevelDto();
+
+    async Task Submit()
+    {
+        try
+        {
+            loading = true;
+            var response = await service.CreateAsync(model);
+            if (response != null && response.IsSuccess)
+            {
+                loading = false;                
+                navManager.NavigateTo("/courselevel/index/create");
+            }
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(NotificationSeverity.Error, ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+
+    }
+}

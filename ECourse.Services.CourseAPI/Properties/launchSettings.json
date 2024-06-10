@@ -20,7 +20,7 @@
     },
     "Container (Dockerfile)": {
       "commandName": "Docker",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
         "ASPNETCORE_HTTP_PORTS": "6000"
@@ -33,7 +33,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:6000",
+      "applicationUrl": "http://localhost:5000",
       "sslPort": 0
     }
   }

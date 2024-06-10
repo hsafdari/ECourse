@@ -10,6 +10,7 @@ namespace ECourse.Admin.Service
         Task<ResponseDto?> GetByIdAsync(string id);
         Task<ResponseDto?> UpdateAsync(TModel entity);
         Task<ResponseDto?> DeleteAsync(string id);
+        Task<ResponseDto?> DeleteAsync(List<string> ids);
         Task<ResponseDto?> GetGrid(Query query);
     }
 }
