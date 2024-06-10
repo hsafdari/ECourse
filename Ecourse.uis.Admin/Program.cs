@@ -5,6 +5,7 @@ using ECourse.Admin.Components;
 using MudBlazor.Services;
 using ECourse.Admin.Service.FilesManager;
 using Radzen;
+using ECourse.Admin.Components.Layout;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,7 +15,6 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICourseLevelService, CourseLevelService>();
-builder.Services.AddScoped<IAlertService, AlertService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IFTPService, FTPService>();
 builder.Services.AddScoped<IFileManagerService, FileManagerService>();

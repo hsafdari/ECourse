@@ -1,8 +1,44 @@
-﻿@page "/courselevel/edit/{id}"
-
+﻿@page "/courselevel/edit/{Id}"
+@using ECourse.Admin.Service.CourseAPI
+@using Newtonsoft.Json
+@inject NavigationManager navManager
+@inject ICourseLevelService service;
+@inject NotificationService NotificationService;
 @rendermode InteractiveServer
-<h3>Edit</h3>
-<Form model="model"></Form>
+
+<Form PageTitle="Edit" model="@model" loading="@loading" OnValidSubmit="@Submit"></Form>
 @code {
-    CourseLevelDto model = new CourseLevelDto();
+    [Parameter]
+    public string Id { get; set; }
+    public bool loading { get; set; } = false;
+    CourseLevelDto model = new();
+    protected override async Task OnParametersSetAsync()   
+    {
+        var response =await service.GetByIdAsync(Id);
+        if (response != null)
+        {
+            model = JsonConvert.DeserializeObject<CourseLevelDto>(Convert.ToString(response.Result));
+            //var test = response.Result;
+        }
+    }
+    async Task Submit()
+    {
+        try
+        {
+            loading = true;
+            var response = await service.UpdateAsync(model);
+            if (response != null && response.IsSuccess)
+            {
+                loading = false;
+                navManager.NavigateTo("/courselevel/index/update");
+            }
+        }
+        catch (Exception ex)
+        {
+            NotificationService.Notify(NotificationSeverity.Error, ex.Message);
+            loading = false;
+            StateHasChanged();
+        }
+
+    }
 }

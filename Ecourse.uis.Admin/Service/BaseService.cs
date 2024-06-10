@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
+using System.Web;
 using static ECourse.Admin.Utility.SD;
 
 namespace ECourse.Admin.Service
@@ -92,7 +93,11 @@ namespace ECourse.Admin.Service
                     _ => HttpMethod.Get,
                 };
                 HttpResponseMessage? apiResponse = null;
-                apiResponse = await client.SendAsync(message);
+                if (message.Method== HttpMethod.Delete)
+                {
+                  apiResponse = await client.DeleteAsync(message.RequestUri);
+                }else
+                apiResponse = await client.SendAsync(message);               
 
                 switch (apiResponse.StatusCode)
                 {
@@ -104,6 +109,8 @@ namespace ECourse.Admin.Service
                         return new() { IsSuccess = false, Message = "Unauthorized" };
                     case HttpStatusCode.InternalServerError:
                         return new() { IsSuccess = false, Message = "Internal Server Error" };
+                    case HttpStatusCode.BadRequest:
+                        return new() { IsSuccess = false, Message = "Bad Request" };
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
                         var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
@@ -136,15 +143,28 @@ namespace ECourse.Admin.Service
             return await SendAsync(new RequestDto()
             {
                 ApiType = ApiType.DELETE,
-                Url = ApiUrl + "/{id}"
+                Url = ApiUrl + $"/{id}"
             });
+        }
+        public async Task<ResponseDto?> DeleteAsync(List<string> ids)
+        {
+            var queryString = HttpUtility.ParseQueryString(string.Empty);
+            foreach (var item in ids)
+            {
+                queryString.Add("ids", item);
+            }
+            return await SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.DELETE,
+                Url = ApiUrl + "/deletemany?" + queryString.ToString()
+            }); ;
         }
 
         public async Task<ResponseDto?> GetByIdAsync(string id)
         {
             return await SendAsync(new RequestDto()
             {
-                Url = ApiUrl + "/{id}"
+                Url = ApiUrl + $"/{id}"
             });
         }
         public async Task<ResponseDto?> UpdateAsync(TModel entity)
@@ -201,5 +221,7 @@ namespace ECourse.Admin.Service
 
             return string.Format("{0}{1}", url, dictionary.Any() ? ("?" + string.Join("&", dictionary.Select((KeyValuePair<string, object> a) => $"{a.Key}={a.Value}"))) : "");
         }
+
+        
     }
 }

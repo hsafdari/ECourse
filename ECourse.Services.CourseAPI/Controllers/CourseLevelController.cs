@@ -3,10 +3,11 @@ using ECourse.Services.CourseAPI.Interfaces;
 using ECourse.Services.CourseAPI.Models;
 using ECourse.Services.CourseAPI.Models.Dto.CourseLevel;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
 using Infrastructure.Models;
 using Infrastructure.Utility;
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
+using Newtonsoft.Json;
 
 namespace ECourse.Services.CourseAPI.Controllers
 {
@@ -29,7 +30,8 @@ namespace ECourse.Services.CourseAPI.Controllers
         {
             try
             {
-                _responseDto.Result = await _courseLevelRepository.GetMany(x => x.IsDeleted == false);
+               var model = await _courseLevelRepository.GetMany();
+                _responseDto.Result = _mapper.Map<List<CourseLevel>, List<CourseLevelDto>>(model);
             }
             catch (Exception ex)
             {
@@ -40,11 +42,12 @@ namespace ECourse.Services.CourseAPI.Controllers
         }
         [HttpGet]
         [Route("{id}")]
-        public async Task<ResponseDto> Get(ObjectId id)
+        public async Task<ResponseDto> Get(string id)
         {
             try
             {
-                _responseDto.Result = await _courseLevelRepository.GetById(x => x.Id == id);
+               var model = await _courseLevelRepository.GetById(x => x.Id ==ObjectId.Parse(id));
+                _responseDto.Result = _mapper.Map<CourseLevel, CourseLevelDto>(model);
             }
             catch (Exception ex)
             {
@@ -60,8 +63,14 @@ namespace ECourse.Services.CourseAPI.Controllers
             try
             {          
                 if (query!=null)
-                {
-                    _responseDto.Result = await _courseLevelRepository.Grid(query);
+                {                    
+                   var model = await _courseLevelRepository.Grid(query);
+                    if (model.Item1==null)
+                    {
+                        throw new Exception();
+                    }
+                    _responseDto.Count = model.Item2;                                   
+                    _responseDto.Result = _mapper.Map<List<CourseLevel>, List<CourseLevelDto>>(model.Item1);
                 }
                 else
                 {
@@ -84,7 +93,13 @@ namespace ECourse.Services.CourseAPI.Controllers
             try
             {
                 var model = _mapper.Map<CourseLevelDto, CourseLevel>(dto);
-                _responseDto.Result = await _courseLevelRepository.Create(model);
+                var result = await _courseLevelRepository.Create(model);
+                if (result > 0)
+                {
+                    _responseDto.IsSuccess = true;
+                    _responseDto.Message = "create Item was successfully!!";
+                    _responseDto.Result = result;
+                }
             }
             catch (Exception ex)
             {
@@ -95,18 +110,75 @@ namespace ECourse.Services.CourseAPI.Controllers
             return _responseDto;
         }
         [HttpPut]
-        public async Task<ResponseDto> Put(CourseLevelDto dto)
+        public async Task<ResponseDto> Put([FromForm] CourseLevelDto dto)
         {
             try
             {
-                var model = _mapper.Map<CourseLevelDto, CourseLevel>(dto);
-                //var _update = Builders<CourseLevel>.Update.Set(x => x.Title, dto.Title)
-                //                                        .Set(x => x.ModifiedDateTime, DateTime.Now)
-                //                                        .Set(x => x.Icon, dto.Icon);
-               // _responseDto.Result = await _courseLevelRepository.Update(x => x.Id == dto.Id, _update);
+                var model = _mapper.Map<CourseLevelDto, CourseLevel>(dto);              
+               var result = await _courseLevelRepository.Update(model);
+                if (result > 0)
+                {
+                    _responseDto.IsSuccess = true;
+                    _responseDto.Message = "update Item was successfully!!";
+                    _responseDto.Result = result;
+                }
             }
             catch (Exception ex)
             {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+            return _responseDto;
+        }
+        [HttpDelete]
+        [Route("{Id}")]
+        public async Task<ResponseDto> Delete(string Id)
+        {
+            try
+            {
+                var result=await _courseLevelRepository.Delete(x=>x.Id==ObjectId.Parse(Id));
+                if (result>0)
+                {
+                    _responseDto.IsSuccess = true;
+                    _responseDto.Message = "Delete Item was successfully!!";                    
+                    _responseDto.Result=result;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+            return _responseDto;
+        }
+        [HttpDelete]
+        [Route("deletemany")]
+        public async Task<ResponseDto> DeleteMany([FromQuery]IEnumerable<string> ids)
+        {
+            try
+            {
+                if (ids==null)
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "badRequest";
+                    _responseDto.Result = null;
+                    return _responseDto;
+                }             
+                List<ObjectId> _ids = ids.Select(x => ObjectId.Parse(x)).ToList();
+                var result = await _courseLevelRepository.DeleteMany(x => _ids.Any(y => x.Id.Equals(y)));
+                if (result > 0)
+                {
+                    _responseDto.IsSuccess = true;
+                    _responseDto.Message = "Delete Items was successfully!!";
+                    _responseDto.Result = result;
+                }
+                _responseDto.IsSuccess = true;
+                _responseDto.Message = "Delete Items was successfully!!";
+            }
+            catch (Exception ex)
+            {
+
                 _responseDto.IsSuccess = false;
                 _responseDto.Message = ex.Message;
             }
