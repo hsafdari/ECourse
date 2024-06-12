@@ -226,7 +226,7 @@ namespace ECourse.Services.CourseAPI.Tests.Data
                             Price=125,
                             CurrencyCode="GBP"
                     }
-                }
+                }                
             };
         }
     }
