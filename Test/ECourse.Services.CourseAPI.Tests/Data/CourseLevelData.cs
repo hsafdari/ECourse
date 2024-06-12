@@ -1,5 +1,5 @@
 ﻿using ECourse.Services.CourseAPI.Models;
-using ECourse.Services.CourseAPI.Models.Dto.CourseLevel;
+using ECourse.Services.CourseAPI.Models.Dto;
 
 namespace ECourse.Services.CourseAPI.Tests.Data
 {

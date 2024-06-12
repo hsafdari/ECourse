@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using ECourse.Services.CourseAPI.Interfaces;
 using ECourse.Services.CourseAPI.Models;
-using ECourse.Services.CourseAPI.Models.Dto.CourseLevel;
 using Microsoft.AspNetCore.Mvc;
 using Infrastructure.Models;
 using Infrastructure.Utility;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using Newtonsoft.Json;
+using ECourse.Services.CourseAPI.Models.Dto;
 
 namespace ECourse.Services.CourseAPI.Controllers
 {

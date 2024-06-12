@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Models;
+using MongoDB.Bson;
 namespace ECourse.Services.CourseAPI.Models
 {
 
@@ -8,7 +9,7 @@ namespace ECourse.Services.CourseAPI.Models
         /// <summary>
         /// each course has multiple sections for example part 1, part 2, ...
         /// </summary>
-        public required string CourseId { get; set; }
+        public required ObjectId CourseId { get; set; }
         /// <summary>
         /// each section has title
         /// </summary>

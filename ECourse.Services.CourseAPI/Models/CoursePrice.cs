@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Models;
+using MongoDB.Bson;
 
 namespace ECourse.Services.CourseAPI.Models
 {
@@ -10,6 +11,6 @@ namespace ECourse.Services.CourseAPI.Models
         public static readonly string DocumentName = nameof(CoursePrice);
         public decimal Price { get; set; }
         public required string  CurrencyCode { get; set;}
-        public required string CourseId { get; set; }
+        public required ObjectId CourseId { get; set; }
     }
 }

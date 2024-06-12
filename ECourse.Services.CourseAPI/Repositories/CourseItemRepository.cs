@@ -1,15 +1,14 @@
-﻿using ECourse.Services.CourseAPI.Models;
-using Middleware.Repository;
-using MongoDB.Driver;
+﻿using ECourse.Services.CourseAPI.Interfaces;
+using ECourse.Services.CourseAPI.Models;
+using Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECourse.Services.CourseAPI.Repository
 {
-    public class CourseItemRepository : BaseRepository<CourseItem>, ICourseItemRepository
+    public class CourseItemRepository : BaseRepository<CourseItem, ApplicationDataContext>, ICourseItemRepository
     {
-        readonly DataContext _dbContext;
-        public CourseItemRepository(DataContext db, string documentname) : base(db, documentname)
+        public CourseItemRepository(IDbContextFactory<ApplicationDataContext> datacontext) : base(datacontext)
         {
-            _dbContext = db;
         }
     }
 }

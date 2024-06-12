@@ -2,7 +2,7 @@
 namespace ECourse.Services.CourseAPI.Models
 {
     /// <summary>
-    /// each course has multiple level forexample Basic, intermidiate and advance
+    /// each course has multiple level for example Basic, Intermediate and advance
     /// </summary>
     public class CourseLevel:BaseEntity
     {

@@ -10,6 +10,8 @@ namespace ECourse.Services.CourseAPI.Enums
         [BsonRepresentation(BsonType.String)]
         article = 1,
         [BsonRepresentation(BsonType.String)]
-        content = 2
+        content = 2,
+        [BsonRepresentation(BsonType.String)]
+        voice=3
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Models;
+using MongoDB.Bson;
 
 namespace ECourse.Services.CourseAPI.Models
 {
@@ -20,7 +21,9 @@ namespace ECourse.Services.CourseAPI.Models
         /// number of buyers who rate this course
         /// </summary>
         public int RateCount { get; set; } = 0;
-        public required string LevelId { get; set; }
+        //bind to Teacher 
+        public required List<CourseTeacher> Teachers { get;set; }
+        public required ObjectId LevelId { get; set; }
         public List<CourseSection> Sections { get; init; } = null!;
         public List<CoursePrice> Prices { get; init; } = null!;
         

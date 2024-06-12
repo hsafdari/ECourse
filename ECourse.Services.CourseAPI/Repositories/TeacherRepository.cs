@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECourse.Services.CourseAPI.Repositories
 {
-    public class CoursePriceRepository : BaseRepository<CoursePrice, ApplicationDataContext>, ICoursePriceRepository
+    public class TeacherRepository : BaseRepository<CourseTeacher, ApplicationDataContext>, ITeacherRepository
     {
-        public CoursePriceRepository(IDbContextFactory<ApplicationDataContext> datacontext) : base(datacontext)
+        public TeacherRepository(IDbContextFactory<ApplicationDataContext> datacontext) : base(datacontext)
         {
         }
     }

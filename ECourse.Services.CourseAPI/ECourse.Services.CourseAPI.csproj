@@ -9,26 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Repositories\CourseItemRepository.cs" />
-    <Compile Remove="Repositories\CoursePriceRepository.cs" />
-    <Compile Remove="Repositories\CourseRepository.cs" />
-    <Compile Remove="Repositories\CourseSectionRepository.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.6" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />
     <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Scrutor" Version="4.2.2" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Dto\CourseItem\" />
-    <Folder Include="Models\Dto\CoursePrice\" />
-    <Folder Include="Models\Dto\CourseSection\" />
   </ItemGroup>
 
   <ItemGroup>

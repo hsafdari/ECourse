@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ECourse.Services.CourseAPI.Models;
-using ECourse.Services.CourseAPI.Models.Dto.CourseLevel;
+using ECourse.Services.CourseAPI.Models.Dto;
 
 namespace ECourse.Services.CourseAPI
 {
@@ -11,6 +11,10 @@ namespace ECourse.Services.CourseAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<CourseLevelDto, CourseLevel>().ReverseMap();
+                config.CreateMap<CourseDto,Course>().ReverseMap();
+                config.CreateMap<CoursePriceDto, CoursePrice>().ReverseMap();
+                config.CreateMap<CourseSectionDto, CourseSection>().ReverseMap();
+                config.CreateMap<CourseItemDto, CourseItem>().ReverseMap();
             });
             return mappingConfig;
         }

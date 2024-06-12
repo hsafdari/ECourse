@@ -2,6 +2,7 @@
 using AutoMapper;
 using ECourse.Services.CourseAPI.Interfaces;
 using ECourse.Services.CourseAPI.Repositories;
+using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -25,12 +26,11 @@ public class Startup(IConfiguration configuration)
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ECourse.Services.CourseAPI", Version = "v1" });
 });
-
-        //services.AddSingleton<ICourseRepository>(sp =>
-        //new CourseRepository(sp.GetService<IMongoDatabase>() ?? throw new Exception("IMongoDatabase not found"), Course.DocumentName));
-        // services.AddSingleton<ICourseLevelRepository>(sp => new CourseLevelRepository(sp.GetService<IMongoDatabase>() ?? throw new Exception("IMongoDatabase not found"), CourseLevel.DocumentName));
-
-        services.AddScoped<ICourseLevelRepository,CourseLevelRepository>();
+        //load repository dynamically
+        services.Scan(scan => scan.FromCallingAssembly()
+            .AddClasses()
+            .AsImplementedInterfaces()
+            .WithScopedLifetime());
         IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
         services.AddSingleton(mapper);
         services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

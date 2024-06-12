@@ -1,8 +1,8 @@
 ﻿using Infrastructure.Models;
 
-namespace ECourse.Services.CourseAPI.Models.Dto.Course
+namespace ECourse.Services.CourseAPI.Models.Dto
 {
-    public class AddCourseDto : BaseDto
+    public class CourseDto : BaseDto
     {
         public required string Name { get; set; }
         public required string Title { get; set; }
@@ -11,5 +11,6 @@ namespace ECourse.Services.CourseAPI.Models.Dto.Course
         /// </summary>
         public required string UrlLink { get; set; }
         public string? Description { get; set; }
+        public IList<CoursePriceDto> CoursePrices { get; set; } = default!;
     }
 }

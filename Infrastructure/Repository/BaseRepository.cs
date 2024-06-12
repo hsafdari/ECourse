@@ -10,15 +10,13 @@ using System.Linq.Expressions;
 
 namespace Infrastructure.Repository
 {
-    public class BaseRepository<TModel, TRepository> : IBaseRepository<TModel> where TModel : BaseEntity where TRepository : DbContext
+    public class BaseRepository<TModel, TContext> : IBaseRepository<TModel> where TModel : BaseEntity where TContext : DbContext
     {
-        private readonly IDbContextFactory<TRepository> dbfactory;
-        private readonly TRepository _DbSet;
+        private readonly IDbContextFactory<TContext> dbfactory;       
 
-        public BaseRepository(IDbContextFactory<TRepository> datacontext)
+        public BaseRepository(IDbContextFactory<TContext> datacontext)
         {
-            dbfactory = datacontext;
-            _DbSet = dbfactory.CreateDbContext();
+            dbfactory = datacontext;            
         }
         public async Task<int> Create(TModel entity)
         {

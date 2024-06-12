@@ -1,13 +1,21 @@
-﻿using ECourse.Services.CourseAPI.Models;
-using Middleware.Repository;
-using MongoDB.Driver;
+﻿using ECourse.Services.CourseAPI.Interfaces;
+using ECourse.Services.CourseAPI.Models;
+using Infrastructure.Models;
+using Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 
-namespace ECourse.Services.CourseAPI.Repository
+namespace ECourse.Services.CourseAPI.Repositories
 {
-    public class CourseRepository : BaseRepository<Course>, ICourseRepository
+    public class CourseRepository : BaseRepository<Course, ApplicationDataContext>, ICourseRepository
     {
-        public CourseRepository(DataContext db, string documentname) : base(db, documentname)
-        {            
+        public CourseRepository(IDbContextFactory<ApplicationDataContext> datacontext) : base(datacontext)
+        {
+        }
+
+        public Task<int> RateInsertAsync(ObjectId Id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

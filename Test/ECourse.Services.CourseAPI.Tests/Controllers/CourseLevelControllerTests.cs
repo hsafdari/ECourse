@@ -1,10 +1,10 @@
-﻿using ECourse.Services.CourseAPI.Models.Dto.CourseLevel;
-using ECourse.Services.CourseAPI.Tests.Data;
+﻿using ECourse.Services.CourseAPI.Tests.Data;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Infrastructure.Models;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 using System.Text.Json;
+using ECourse.Services.CourseAPI.Models.Dto;
 
 namespace ECourse.Services.CourseAPI.Tests.Controllers
 {

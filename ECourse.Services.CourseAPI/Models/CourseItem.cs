@@ -12,23 +12,28 @@ namespace ECourse.Services.CourseAPI.Models
         /// <summary>
         /// if user didn't buy course it shows if enable
         /// </summary>
-        public bool IsPreview { get; set; }
-        /// <summary>
-        /// the location of file
-        /// </summary>
-        public string? Url { get; set; }
+        public bool IsPreview { get; set; } 
         /// <summary>
         /// the origin file name
         /// </summary>
         public required string FileName { get; set; }
+        //Relative file location
+        public string FileLocation { get; set; } = string.Empty;
+        //Link of file which can be shown or downloaded
+        public string FileUrl { get; set; } = string.Empty;
+        /// <summary>
+        /// file type extensions,auto filled
+        /// </summary>
+        public string FileExtension { get; set; } = string.Empty;
         /// <summary>
         /// the length of video or length of reading file or content
         /// </summary>
-        public required string Timeduration { get; set; }
-        public required string CourseId { get; set; }
-        public required string SectionId { get; set; }
+        public required string TimeDuration { get; set; }
+        public required ObjectId CourseId { get; set; }
+        public required ObjectId SectionId { get; set; }
         public string? Description { get; set; }
-        public CourseType CourseType { get; set; }     
+        public CourseType CourseType { get; set; }
+        public List<CourseItemAttachment> CourseItemAttachments { get; init; } = null!;
     }
 
    

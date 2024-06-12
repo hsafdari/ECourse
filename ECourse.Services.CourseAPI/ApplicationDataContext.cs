@@ -12,11 +12,11 @@ namespace ECourse.Services.CourseAPI
         : base(options)
         {
         }
-        //public DbSet<Course> Courses { get; init; }
-        //public DbSet<CourseItem> CourseItems { get; init; }
+        public DbSet<Course> Courses { get; init; }
+        public DbSet<CourseItem> CourseItems { get; init; }
         public DbSet<CourseLevel> CourseLevels { get; init; }
-        //public DbSet<CoursePrice> CoursePrices { get; init; }
-        //public DbSet<CourseSection> CourseSections { get; init; }
+        public DbSet<CoursePrice> CoursePrices { get; init; }
+        public DbSet<CourseSection> CourseSections { get; init; }
         public static ApplicationDataContext Create(IMongoDatabase database) => new(new DbContextOptionsBuilder<ApplicationDataContext>().
         UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName).Options);
         //public DataContext(DbContextOptions options) : base(options)
@@ -26,11 +26,11 @@ namespace ECourse.Services.CourseAPI
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            //modelBuilder.Entity<Course>().ToCollection(Course.DocumentName);
-            //modelBuilder.Entity<CourseItem>().ToCollection(CourseItem.DocumentName);
+            modelBuilder.Entity<Course>().ToCollection(Course.DocumentName);
+            modelBuilder.Entity<CourseItem>().ToCollection(CourseItem.DocumentName);
             modelBuilder.Entity<CourseLevel>().ToCollection(CourseLevel.DocumentName);
-            //modelBuilder.Entity<CoursePrice>().ToCollection(CoursePrice.DocumentName);
-            //modelBuilder.Entity<CourseSection>().ToCollection(CourseSection.DocumentName);
+            modelBuilder.Entity<CoursePrice>().ToCollection(CoursePrice.DocumentName);
+            modelBuilder.Entity<CourseSection>().ToCollection(CourseSection.DocumentName);
             base.OnModelCreating(modelBuilder);
         }
     }
