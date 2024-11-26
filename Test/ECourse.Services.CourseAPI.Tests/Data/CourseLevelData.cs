@@ -3,7 +3,7 @@ using ECourse.Services.CourseAPI.Models.Dto;
 
 namespace ECourse.Services.CourseAPI.Tests.Data
 {
-    public class CourseLevelData
+    public class CourseLevelData: IFakeData<CourseLevel, CourseLevelDto>
     {
         public CourseLevel FakeGetSingleRow()
         {

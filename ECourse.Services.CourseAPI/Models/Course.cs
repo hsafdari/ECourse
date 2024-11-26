@@ -22,7 +22,7 @@ namespace ECourse.Services.CourseAPI.Models
         /// </summary>
         public int RateCount { get; set; } = 0;
         //bind to Teacher 
-        public List<CourseTeacher> Teachers { get;set; }
+        public List<CourseTeacher> Teachers { get;set; } = null!;
         public required ObjectId LevelId { get; set; }
         public List<CourseSection> Sections { get; init; } = null!;
         public List<CoursePrice> Prices { get; init; } = null!;

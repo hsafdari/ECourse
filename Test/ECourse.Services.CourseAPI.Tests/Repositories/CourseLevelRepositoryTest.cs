@@ -48,7 +48,7 @@ namespace ECourse.Services.CourseAPI.Tests.Repositories
         public async Task<int> InsertFakeDataList()
         {
             var items = new List<CourseLevel>();
-            var fakedata = new FakeDataGenerator().dataList();
+            var fakedata = new FakeDataGenerator_Create_CourseLevel().dataList();
             items = fakedata.Select(x => new CourseLevel
             {
                 Id = ObjectId.Parse(x[0].ToString()),
@@ -81,7 +81,7 @@ namespace ECourse.Services.CourseAPI.Tests.Repositories
         }
 
         [Theory]
-        [ClassData(typeof(FakeDataGenerator))]
+        [ClassData(typeof(FakeDataGenerator_Create_CourseLevel))]
         public async Task Should_Create_Rows_CourseLevel(ObjectId Id, string Title, string FileLocation, string Icon, DateTime CreateDateTime)
         {
             var item = new CourseLevel
@@ -132,15 +132,15 @@ namespace ECourse.Services.CourseAPI.Tests.Repositories
         public async Task Should_DeleteRow_CourseLevel()
         {
             var model = InsertFakeData();
-            _courseLevelRepository.Delete(x=>x.Id==model.Id);
+            _courseLevelRepository.Delete(x => x.Id == model.Id);
 
             var context = new ApplicationDataContext(_dbContextOptions);
-            var count = context.CourseLevels.Where(x=>x.IsDeleted==false).Count();
+            var count = context.CourseLevels.Where(x => x.IsDeleted == false).Count();
             Assert.Equal(0, count);
 
         }
         [Theory]
-        [ClassData(typeof(FakeGridDataGenerator))]
+        [ClassData(typeof(FakeDataGenerator_Grid_CourseLevel))]
         public async Task Should_Return_Grid(string filter, int take, int skip, string orderby, string select)
         {
             //Arrange
@@ -154,67 +154,42 @@ namespace ECourse.Services.CourseAPI.Tests.Repositories
             };
             //Act
             InsertFakeDataList();
-            var data=_courseLevelRepository.Grid(query);
+            var data = _courseLevelRepository.Grid(query);
 
             //Assert
             Assert.NotNull(data.Result.Item1);
             Assert.True(data.Result.Item2 > 0);
         }
     }
+    public class FakeDataGenerator_Grid_CourseLevel : FakeDataGenerator
+    {
+        public FakeDataGenerator_Grid_CourseLevel() : base(new List<object[]>())
+        {
+            base._data = new List<object[]>
+            {
+                new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"Beginner\".ToLower())", 10,0,"Id desc","" },
+                new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"1\".ToLower())",10,0,"Id desc","" },
+                new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"2\".ToLower())", 10, 0, "Id desc", "" },
+                new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"3\".ToLower())", 10, 0, "Id desc", "" },
+                new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"b\".ToLower())", 10, 0, "Id desc", "" }
+            };
+        }
+
+    }
     /// <summary>
     /// Data Generated base CourseLevel class
     /// </summary>
-    public class FakeDataGenerator : IEnumerable<object[]>
+    public class FakeDataGenerator_Create_CourseLevel : FakeDataGenerator
     {
-        private readonly List<object[]> _data = new List<object[]>
+        public FakeDataGenerator_Create_CourseLevel() : base(new List<object[]>())
         {
+            this._data = new List<object[]> {
             new object[] { MongoDB.Bson.ObjectId.GenerateNewId(), "Beginner", "/Uploads/Test/file.jpg", "/Uploads/test.jpg",DateTime.Now },
             new object[] { MongoDB.Bson.ObjectId.GenerateNewId(), "Beginner1", "/Uploads/Test/file1.jpg", "/Uploads/test1.jpg",DateTime.Now.AddHours(1) },
             new object[] { MongoDB.Bson.ObjectId.GenerateNewId(), "Beginner2", "/Uploads/Test/file2.jpg", "/Uploads/test2.jpg",DateTime.Now.AddHours(2) },
             new object[] { MongoDB.Bson.ObjectId.GenerateNewId(), "Beginner3", "/Uploads/Test/file3.jpg", "/Uploads/test3.jpg",DateTime.Now.AddHours(3) },
             new object[] { MongoDB.Bson.ObjectId.GenerateNewId(), "Beginner4", "/Uploads/Test/file4.jpg", "/Uploads/test4.jpg",DateTime.Now.AddHours(4) }
-        };
-        public IEnumerator<object[]> GetEnumerator()
-        {
-            return _data.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-        public List<object[]> dataList()
-        {
-            return _data;
-        }
-    }
-    /// <summary>
-    /// Data Generated based on GridQuery class
-    /// </summary>
-    public class FakeGridDataGenerator : IEnumerable<object[]>
-    {
-        //GridQuery class properties
-        //string? filter
-        //int top
-        //int skip
-        //string? orderby
-        //string? select
-        private readonly List<object[]> _data = new List<object[]>
-        {
-            new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"Beginner\".ToLower())", 10,0,"Id desc","" },
-            new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"1\".ToLower())",10,0,"Id desc","" },
-            new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"2\".ToLower())",10,0,"Id desc","" },
-            new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"3\".ToLower())",10,0,"Id desc","" },
-            new object[] { "(Title == null ? \"\" : Title).ToLower().Contains(\"b\".ToLower())",10,0,"Id desc","" }
-        };
-        public IEnumerator<object[]> GetEnumerator()
-        {
-            return _data.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+            };
+        }        
     }
 }

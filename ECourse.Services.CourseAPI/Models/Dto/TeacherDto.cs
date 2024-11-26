@@ -11,7 +11,7 @@ namespace ECourse.Services.CourseAPI.Models.Dto
         public string FileName { get; set; } = string.Empty;
         public string FileLocation { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public List<TeacherSocialLink> TeacherSocialLinks { get; set; } = null!;
+        public List<TeacherSocialLinkDto> TeacherSocialLinks { get; set; } = null!;
         //connect UserId to teacher's Id
         public ObjectId? UserId { get; set; }
     }

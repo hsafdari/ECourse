@@ -7,6 +7,9 @@ namespace ECourse.Services.CourseAPI.Models
     public class CourseLevel:BaseEntity
     {
         public static readonly string DocumentName = nameof(CourseLevel);
+        /// <summary>
+        /// The name of courseTitle like Basic, Intermediate, Advance and ...
+        /// </summary>
         public required string Title { get; set; }
         public required string Icon { get; set; }
         public string FileName { get; set; } = string.Empty;

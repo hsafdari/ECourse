@@ -3,7 +3,7 @@ using ECourse.Services.CourseAPI.Models;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 
-namespace ECourse.Services.CourseAPI.Repository
+namespace ECourse.Services.CourseAPI.Repositories
 {
     public class CourseItemRepository : BaseRepository<CourseItem, ApplicationDataContext>, ICourseItemRepository
     {

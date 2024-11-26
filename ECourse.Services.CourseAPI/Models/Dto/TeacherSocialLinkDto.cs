@@ -1,11 +1,10 @@
 ﻿using Infrastructure.Models;
 using MongoDB.Bson;
 
-namespace ECourse.Services.CourseAPI.Models
+namespace ECourse.Services.CourseAPI.Models.Dto
 {
-    public class TeacherSocialLink:BaseEntity
+    public class TeacherSocialLinkDto : BaseDto
     {
-        public static readonly string DocumentName = nameof(TeacherSocialLink);
         public ObjectId TeacherId { get; set; }
         public ObjectId SocialLinkId { get; set; }
         public required string Url { get; set; }

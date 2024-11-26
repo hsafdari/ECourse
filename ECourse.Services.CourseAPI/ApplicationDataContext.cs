@@ -17,6 +17,9 @@ namespace ECourse.Services.CourseAPI
         public DbSet<CourseLevel> CourseLevels { get; init; }
         public DbSet<CoursePrice> CoursePrices { get; init; }
         public DbSet<CourseSection> CourseSections { get; init; }
+        public DbSet<SocialLink> SocialLinks { get; init; }
+        public DbSet<Teacher> Teachers { get; init; }
+        public DbSet<TeacherSocialLink> teacherSocialLinks { get; init; }
         public static ApplicationDataContext Create(IMongoDatabase database) => new(new DbContextOptionsBuilder<ApplicationDataContext>().
         UseMongoDB(database.Client, database.DatabaseNamespace.DatabaseName).Options);
         //public DataContext(DbContextOptions options) : base(options)
@@ -31,6 +34,9 @@ namespace ECourse.Services.CourseAPI
             modelBuilder.Entity<CourseLevel>().ToCollection(CourseLevel.DocumentName);
             modelBuilder.Entity<CoursePrice>().ToCollection(CoursePrice.DocumentName);
             modelBuilder.Entity<CourseSection>().ToCollection(CourseSection.DocumentName);
+            modelBuilder.Entity<SocialLink>().ToCollection(SocialLink.DocumentName);
+            modelBuilder.Entity<Teacher>().ToCollection(Teacher.DocumentName);
+            modelBuilder.Entity<TeacherSocialLink>().ToCollection(TeacherSocialLink.DocumentName);
             base.OnModelCreating(modelBuilder);
         }
     }

@@ -2,53 +2,44 @@
 using Infrastructure.Utility;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using MongoDB.Driver;
-using MongoDB.Driver.Linq;
-using SharpCompress.Common;
 using System.Linq.Dynamic.Core;
 using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 
 namespace Infrastructure.Repository
 {
-    public class BaseRepository<TModel, TContext> : IBaseRepository<TModel> where TModel : BaseEntity where TContext : DbContext
+    public abstract class BaseRepository<TModel, TContext>(IDbContextFactory<TContext> datacontext) : IBaseRepository<TModel> where TModel : BaseEntity where TContext : DbContext
     {
-        private readonly IDbContextFactory<TContext> dbfactory;       
-
-        public BaseRepository(IDbContextFactory<TContext> datacontext)
-        {
-            dbfactory = datacontext;            
-        }
+        private readonly IDbContextFactory<TContext> dbfactory = datacontext;
         public async Task<int> Create(TModel entity)
         {
             try
             {
-                using (var _dbContext = dbfactory.CreateDbContext())
-                {
-                    _dbContext.Set<TModel>().Add(entity);
-                    return await _dbContext.SaveChangesAsync();
-                }
+                using var _dbContext = dbfactory.CreateDbContext();
+                _dbContext.Set<TModel>().Add(entity);
+                return await _dbContext.SaveChangesAsync();
+
             }
             catch (Exception)
             {
                 return -1;
             }
-        }      
+        }
         public async Task<int> Delete(Expression<Func<TModel, bool>> where)
         {
             try
             {
-                using (var _dbContext = dbfactory.CreateDbContext())
+                using var _dbContext = dbfactory.CreateDbContext();
+                var item = await _dbContext.Set<TModel>().Where(where).FirstOrDefaultAsync();
+                if (item != null)
                 {
-                    var item = await _dbContext.Set<TModel>().Where(where).FirstOrDefaultAsync();
-                    if (item!=null)
-                    {
-                        item.IsDeleted = true;
-                        item.ModifiedDateTime = DateTime.Now;
-                        _dbContext.Set<TModel>().Update(item);
-                    }
-                   
-                    return await _dbContext.SaveChangesAsync();
+                    item.IsDeleted = true;
+                    item.ModifiedDateTime = DateTime.Now;
+                    _dbContext.Set<TModel>().Update(item);
                 }
+
+                return await _dbContext.SaveChangesAsync();
+
             }
             catch (Exception)
             {
@@ -65,22 +56,21 @@ namespace Infrastructure.Repository
         {
             try
             {
-                using (var _dbContext = dbfactory.CreateDbContext())
+                using var _dbContext = dbfactory.CreateDbContext();
+                var items = await _dbContext.Set<TModel>().Where(where).ToListAsync();
+                if (items != null)
                 {
-                    var items = await _dbContext.Set<TModel>().Where(where).ToListAsync();
-                    if (items != null)
+                    foreach (var item in items)
                     {
-                        foreach (var item in items)
-                        {
-                            item.IsDeleted = true;
-                            item.ModifiedDateTime = DateTime.Now;
+                        item.IsDeleted = true;
+                        item.ModifiedDateTime = DateTime.Now;
 
-                        }                        
-                        _dbContext.Set<TModel>().UpdateRange(items);
                     }
-
-                    return await _dbContext.SaveChangesAsync();
+                    _dbContext.Set<TModel>().UpdateRange(items);
                 }
+
+                return await _dbContext.SaveChangesAsync();
+
             }
             catch (Exception)
             {
@@ -91,59 +81,56 @@ namespace Infrastructure.Repository
         public async Task<List<TModel>> GetMany()
         {
             List<TModel>? items = null;
-            using (var _dbContext = dbfactory.CreateDbContext())
-            {
-
-                items = await _dbContext.Set<TModel>().Where(x => x.IsDeleted == false).ToListAsync();
-            }            
+            using var _dbContext = dbfactory.CreateDbContext();
+            items = await _dbContext.Set<TModel>().Where(x => x.IsDeleted == false).ToListAsync();
             return items;
         }
         public async Task<List<TModel>> GetMany(Expression<Func<TModel, bool>> where)
         {
             List<TModel>? items = null;
-            using (var _dbContext = dbfactory.CreateDbContext())
-            {
-
-                items = await _dbContext.Set<TModel>().Where(x=>x.IsDeleted==false).Where(where).ToListAsync();
-            }
+            using var _dbContext = dbfactory.CreateDbContext();
+            items = await _dbContext.Set<TModel>().Where(x => x.IsDeleted == false).Where(where).ToListAsync();
             //var items2= await _DbSet.Set<TModel>().Where(where).ToListAsync();
             return items;
         }
         public async Task<TModel> GetById(Expression<Func<TModel, bool>> where)
         {
-            using (var _dbContext = dbfactory.CreateDbContext())
+            try
             {
+                using var _dbContext = dbfactory.CreateDbContext();
                 return await _dbContext.Set<TModel>().Where(x => x.IsDeleted == false).Where(where).FirstOrDefaultAsync();
+
             }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
 
         public async Task<int> Update(TModel entity)
         {
-            using (var _dbContext = dbfactory.CreateDbContext())
-            {
-                _dbContext.Set<TModel>().Update(entity);
-                return await _dbContext.SaveChangesAsync();
-            }
+            using var _dbContext = dbfactory.CreateDbContext();
+            _dbContext.Set<TModel>().Update(entity);
+            return await _dbContext.SaveChangesAsync();
         }
 
 
-        public async Task<(List<TModel>,int)> Grid(GridQuery query)
+        public async Task<(List<TModel>, int)> Grid(GridQuery query)
         {
-            using (var _dbContext = dbfactory.CreateDbContext())
-            {
-                var items= ApplyQuery(_dbContext.Set<TModel>().AsQueryable(), query);               
-                int count=items.Count();
-                items = items.Skip(query.skip).Take(query.top);
-                return (await items.ToDynamicListAsync<TModel>(), count);
-            }
-
+            using var _dbContext = dbfactory.CreateDbContext();
+                var items = ApplyQuery(_dbContext.Set<TModel>().AsQueryable(), query);
+            int count = items.Count();
+            items = items.Skip(query.skip).Take(query.top);
+            return (await items.ToDynamicListAsync<TModel>(), count);
         }
-        private IQueryable<T> ApplyQuery<T>(IQueryable<T> items, GridQuery query) where T : BaseEntity
+        public IQueryable<T> ApplyQuery<T>(IQueryable<T> items, GridQuery query) where T : BaseEntity
         {
             if (query != null)
             {
                 if (!string.IsNullOrEmpty(query.filter))
-                {                    
+                {
                     items = items.Where<T>(query.filter);
                 }
                 if (!string.IsNullOrEmpty(query.orderby))
@@ -159,6 +146,6 @@ namespace Infrastructure.Repository
             }
 
             return items;
-        }      
+        }
     }
 }

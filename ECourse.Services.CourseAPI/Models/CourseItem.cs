@@ -10,7 +10,7 @@ namespace ECourse.Services.CourseAPI.Models
         public static readonly string DocumentName = nameof(CourseItem);
         public required string Name { get; set; }
         /// <summary>
-        /// if user didn't buy course it shows if enable
+        /// enable for users, if it is free.
         /// </summary>
         public bool IsPreview { get; set; } 
         /// <summary>

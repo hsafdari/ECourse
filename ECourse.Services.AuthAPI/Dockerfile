@@ -5,26 +5,25 @@ FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
-EXPOSE 8081
 
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Ecourse.uis.Admin/ECourse.Admin.csproj", "Ecourse.uis.Admin/"]
-RUN dotnet restore "./Ecourse.uis.Admin/ECourse.Admin.csproj"
+COPY ["ECourse.Services.AuthAPI/ECourse.Services.AuthAPI.csproj", "ECourse.Services.AuthAPI/"]
+RUN dotnet restore "./ECourse.Services.AuthAPI/ECourse.Services.AuthAPI.csproj"
 COPY . .
-WORKDIR "/src/Ecourse.uis.Admin"
-RUN dotnet build "./ECourse.Admin.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/ECourse.Services.AuthAPI"
+RUN dotnet build "./ECourse.Services.AuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./ECourse.Admin.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./ECourse.Services.AuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ECourse.Admin.dll"]
+ENTRYPOINT ["dotnet", "ECourse.Services.AuthAPI.dll"]

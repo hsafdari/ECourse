@@ -4,7 +4,7 @@
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
     <DockerPublishLocally>False</DockerPublishLocally>
-    <ProjectGuid>b64bf0d5-fabd-4e16-8d8f-05202bc63006</ProjectGuid>
+    <ProjectGuid>16ed719f-da13-425c-afb2-ce8c6dc565c2</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
     <DockerServiceName>ecourse.services.courseapi</DockerServiceName>

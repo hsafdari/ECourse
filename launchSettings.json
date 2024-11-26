@@ -4,7 +4,11 @@
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
       "serviceActions": {
-        "ecourse.services.courseapi": "StartDebugging"
+        "ecourse.services.courseapi": "StartDebugging",
+        "ecourse.services.authapi": "StartDebugging",
+        "ecourse.services.blogapi": "StartDebugging",
+        "ecourse.services.orderapi": "StartDebugging",
+        "ecourse.admin": "StartDebugging"
       }
     }
   }

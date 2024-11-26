@@ -34,13 +34,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Gateways.AdminPanel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Middleware", "ECourse.Middlewares.Middleware\Middleware.csproj", "{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{B64BF0D5-FABD-4E16-8D8F-05202BC63006}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Admin", "Ecourse.uis.Admin\ECourse.Admin.csproj", "{9B6033DB-C0B2-48EE-9166-CBCE92474800}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECourse.Services.CourseAPI.Tests", "Test\ECourse.Services.CourseAPI.Tests\ECourse.Services.CourseAPI.Tests.csproj", "{2DF31D77-6750-4AED-A7D8-E886CDCFE635}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{16ED719F-DA13-425C-AFB2-CE8C6DC565C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,10 +76,6 @@ Global
 		{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80A47CFB-7EE4-4134-AEA0-823F4954F5C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B64BF0D5-FABD-4E16-8D8F-05202BC63006}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B6033DB-C0B2-48EE-9166-CBCE92474800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B6033DB-C0B2-48EE-9166-CBCE92474800}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B6033DB-C0B2-48EE-9166-CBCE92474800}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -92,6 +88,10 @@ Global
 		{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F6CE9C9-D1AF-4214-9436-19AE451DFC16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16ED719F-DA13-425C-AFB2-CE8C6DC565C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16ED719F-DA13-425C-AFB2-CE8C6DC565C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16ED719F-DA13-425C-AFB2-CE8C6DC565C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16ED719F-DA13-425C-AFB2-CE8C6DC565C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

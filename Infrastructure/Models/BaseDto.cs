@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Models
 {
-    public class BaseDto
+    public abstract class BaseDto
     {
         public string Id { get; set; }
         public DateTime CreateDateTime { get; set; } = DateTime.Now;

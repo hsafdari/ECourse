@@ -5,6 +5,7 @@ namespace ECourse.Services.CourseAPI.Models
 {
     public class Teacher:BaseEntity
     {
+        public static readonly string DocumentName = nameof(Teacher);
         public required string FirstName { get; set; }
         public required string LastName { get; set; }
         public string Photo { get; set; } = string.Empty;

@@ -1,8 +1,57 @@
-version: '3.4'
+version: '1.0'
 
 services:
+  mongo:
+    image: 'mongo'
+    ports:
+        - 27017:27017
+
+  ecourse.services.authapi:
+    image: ${DOCKER_REGISTRY-}ecourseservicesauthapi
+    build:
+      context: .
+      dockerfile: ECourse.Services.AuthAPI/Dockerfile
+    depends_on:
+        - mongo
+    ports:
+        - 5001:80
+
+  ecourse.services.blogapi:
+    image: ${DOCKER_REGISTRY-}ecourseservicesblogapi
+    build:
+      context: .
+      dockerfile: ECourse.Services.BlogAPI/Dockerfile
+    depends_on:
+        - mongo
+    ports:
+        - 5002:80
+    
   ecourse.services.courseapi:
     image: ${DOCKER_REGISTRY-}ecourseservicescourseapi
     build:
       context: .
       dockerfile: ECourse.Services.CourseAPI/Dockerfile
+    depends_on:
+        - mongo
+    ports:
+        - 5003:80    
+  ecourse.services.orderapi:
+    image: ${DOCKER_REGISTRY-}ecourseservicesorderapi
+    build:
+      context: .
+      dockerfile: ECourse.Services.OrderAPI/Dockerfile
+    depends_on:
+        - mongo
+    ports:
+        - 5004:80
+    
+  ecourse.admin:
+    image: ${DOCKER_REGISTRY-}ecourseadmin
+    build:
+      context: .
+      dockerfile: Ecourse.uis.Admin/Dockerfile
+    depends_on:
+        - mongo
+    ports:
+        - 5005:80
+    

@@ -1,5 +1,3 @@
-version: '3.4'
-
 services:
   ecourse.services.courseapi:
     environment:
@@ -7,8 +5,39 @@ services:
       - ASPNETCORE_HTTP_PORTS=8080
     ports:
       - "8080"
-  mongo-database:
-    container_name: courseapi-mongo
-    image: mongo
+
+  ecourse.services.authapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
     ports:
-      - 27017:27017
+      - "8080"
+
+
+  ecourse.services.blogapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "8080"
+
+
+  ecourse.services.orderapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "8080"
+
+
+  ecourse.admin:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
