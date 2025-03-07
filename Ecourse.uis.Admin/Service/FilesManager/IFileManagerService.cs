@@ -7,6 +7,6 @@ namespace ECourse.Admin.Service.FilesManager
     {
         public Task<ResponseDto> UploadFileAsync(IBrowserFile browserFile, string serviceName,string previousIcon);
         public Task<ResponseDto> UploadFileAsync(IList<IBrowserFile> browserFiles, string serviceName);
-        public ResponseDto DeleteFile(string fileName);
+        public Task<ResponseDto> DeleteFileAsync(string fileName);
     }
 }

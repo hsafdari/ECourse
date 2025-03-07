@@ -3,11 +3,11 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace Infrastructure.Models
 {
-    public abstract class BaseEntity
+    public class BaseEntity
     {
-        [BsonId]
-        //[BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public ObjectId Id { get; set; }
+        [BsonId] // Marks this as the primary key in MongoDB
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         public DateTime CreateDateTime { get; set; } = DateTime.Now;
         public DateTime? ModifiedDateTime { get; set; }
         public bool IsDeleted { get; set; } = false;

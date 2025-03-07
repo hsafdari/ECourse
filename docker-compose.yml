@@ -1,11 +1,10 @@
-version: '1.0'
+version: '3.0'
 
 services:
   mongo:
     image: 'mongo'
     ports:
         - 27017:27017
-
   ecourse.services.authapi:
     image: ${DOCKER_REGISTRY-}ecourseservicesauthapi
     build:
@@ -14,8 +13,7 @@ services:
     depends_on:
         - mongo
     ports:
-        - 5001:80
-
+        - 4001:8080
   ecourse.services.blogapi:
     image: ${DOCKER_REGISTRY-}ecourseservicesblogapi
     build:
@@ -24,8 +22,7 @@ services:
     depends_on:
         - mongo
     ports:
-        - 5002:80
-    
+        - 4002:8080    
   ecourse.services.courseapi:
     image: ${DOCKER_REGISTRY-}ecourseservicescourseapi
     build:
@@ -34,7 +31,7 @@ services:
     depends_on:
         - mongo
     ports:
-        - 5003:80    
+        - 4003:8080    
   ecourse.services.orderapi:
     image: ${DOCKER_REGISTRY-}ecourseservicesorderapi
     build:
@@ -43,8 +40,7 @@ services:
     depends_on:
         - mongo
     ports:
-        - 5004:80
-    
+        - 4004:8080    
   ecourse.admin:
     image: ${DOCKER_REGISTRY-}ecourseadmin
     build:
@@ -53,5 +49,5 @@ services:
     depends_on:
         - mongo
     ports:
-        - 5005:80
+        - 4005:8080
     

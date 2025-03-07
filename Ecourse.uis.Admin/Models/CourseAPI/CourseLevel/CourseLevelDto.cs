@@ -1,7 +1,4 @@
-﻿using ECourse.Admin.Models;
-using Microsoft.AspNetCore.Components.Forms;
-
-namespace ECourse.Admin.Models.CourseAPI.CourseLevel
+﻿namespace ECourse.Admin.Models.CourseAPI.CourseLevel
 {
     public class CourseLevelDto : BaseDto
     {

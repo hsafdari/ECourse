@@ -1,5 +1,4 @@
 ﻿@page "/courselevel/index"
-@page "/courselevel/index/{msg}"
 @using ECourse.Admin.Models
 @using ECourse.Admin.Models.CourseAPI.CourseLevel
 @using ECourse.Admin.Service.CourseAPI;
@@ -8,36 +7,41 @@
 @inject ICourseLevelService service;
 @inject NotificationService NotificationService;
 @inject Radzen.DialogService DialogService;
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @rendermode InteractiveServer
 <PageTitle>Course Level</PageTitle>
-<h1>Course Level</h1>
-<div class="container">
-    <button class="btn btn-success" onclick="@CreateAsync">Create</button>
-    <button class="btn btn-primary" onclick="@Edit">Edit</button>
-    <button class="btn btn-danger" onclick="@Del">Remove</button>
+<h3>Course Level</h3>
+<hr />
+<div class="row-fluid">
+    <button class="btn btn-success" disabled="@IsCreatbuttonDisabled" onclick="@CreateAsync">Add New Item <i class="bi-plus-circle"></i> </button>
+    <button class="btn btn-primary" disabled="@IsEditbuttonDisabled" onclick="@Edit">Edit<i class="bi-pencil-square"></i></button>
+    <button class="btn btn-danger" disabled="@IsDeletebuttonDisabled" onclick="@Del">Remove <i class="bi-x-circle"></i></button>
 </div>
 <RadzenDataGrid @ref="grid" @bind-Value=@selecteditems SelectionMode="DataGridSelectionMode.Multiple" KeyProperty="Id" IsLoading="@isLoading" Count="@count" Data="@items"
-                LoadData="@LoadData" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                FilterMode="FilterMode.Advanced" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="20"
-                PagerHorizontalAlign="HorizontalAlign.Center" ColumnWidth="200px">
+LoadData="@LoadData" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat"
+FilterMode="FilterMode.Advanced" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="20" PageSizeOptions="@pageSizeOptions"
+PagerHorizontalAlign="HorizontalAlign.Center" ColumnWidth="200px">
     <Columns>
-        <RadzenDataGridColumn Width="60px" Sortable="false" Filterable="false">
+        <RadzenDataGridColumn Width="60px" Sortable="false" Filterable="false" TextAlign="TextAlign.Center">
             <HeaderTemplate>
-                <RadzenCheckBox TriState="false" TValue="bool?" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select all items" }})"
-                                Value="@(selecteditems == null || selecteditems?.Any() != true ? false : !items.All(i => selecteditems.Select(e => e.Id).Contains(i.Id)) ? null : items.Any(i => selecteditems.Select(e => e.Id).Contains(i.Id)))"
-                                Change="@(args => selecteditems = args == true ? (selecteditems ?? Enumerable.Empty<CourseLevelDto>()).Union(items.Where(i => !(selecteditems ?? Enumerable.Empty<CourseLevelDto>()).Select(e => e.Id).Contains(i.Id))).ToList() : null)" />
+                <RadzenCheckBox TriState="false" TValue="bool?" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select all items" }})" Change="@(args => selecteditems = args == true?(selecteditems ??Enumerable.Empty<CourseLevelDto>()).Union(items.Where(i => !(selecteditems ?? Enumerable.Empty<CourseLevelDto>()).Select(e => e.Id).Contains(i.Id))).ToList() : null)"
+                Value="@(selecteditems == null || selecteditems?.Any() != true ? false : !items.All(i => selecteditems.Select(e => e.Id).Contains(i.Id)) ? null : items.Any(i => selecteditems.Select(e => e.Id).Contains(i.Id)))" />
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenCheckBox TriState="false" Value="@(selecteditems != null && selecteditems.Select(e => e.Id).Contains(data.Id))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"
-                                TValue="bool" />
+                TValue="bool" />
             </Template>
         </RadzenDataGridColumn>
-        <RadzenDataGridColumn Property="Title" Title="Title" Width="150px" />
-        <RadzenDataGridColumn Property="Icon" Title="Icon" Width="150px" />
-        <RadzenDataGridColumn Property="FileName" Width="150px" />
-        <RadzenDataGridColumn Property="FileLocation" Width="150px" />
-        <RadzenDataGridColumn Property="CreateDateTime" Title="Create DateTime" FormatString="{0:dd/MM/yyyy HH:mm}" />
-        <RadzenDataGridColumn Property="ModifiedDateTime" Title="Modified DateTime" FormatString="{0:dd/MM/yyyy HH:mm}" />
+        <RadzenDataGridColumn Property="Title" Title="Title" Width="80px" />
+        <RadzenDataGridColumn Title="Icon" Width="80px" TextAlign="TextAlign.Center">
+            <Template Context="data">
+                <img src="@data.Icon" alt="@data.Title" class="rz-gravatar" />
+            </Template>
+        </RadzenDataGridColumn>
+        <RadzenDataGridColumn Property="FileName" title="File Name" Width="150px" />
+        <RadzenDataGridColumn Property="FileLocation" title="File Location" Width="150px" />
+        <RadzenDataGridColumn Property="CreateDateTime" Title="Create DateTime" FormatString="{0:dd/MM/yyyy HH:mm}" TextAlign="TextAlign.Center" Width="100px" />
+        <RadzenDataGridColumn Property="ModifiedDateTime" Title="Modified DateTime" FormatString="{0:dd/MM/yyyy HH:mm}" TextAlign="TextAlign.Center" Width="100px" />
     </Columns>
     <LoadingTemplate>
         <RadzenProgressBarCircular ProgressBarStyle="ProgressBarStyle.Primary" Value="100" ShowValue="false" Mode="ProgressBarMode.Indeterminate" />
@@ -46,45 +50,59 @@
 
 
 @code {
-    [Parameter]
-    public string msg { get; set; }
     IEnumerable<CourseLevelDto> items;
     IList<CourseLevelDto> selecteditems;
     RadzenDataGrid<CourseLevelDto> grid;
-    Query query = new();
+    public string message { get; set; }
+    IEnumerable<int> pageSizeOptions = new int[] { 10, 20, 50 };
+    GridQuery query = new();
     bool isLoading = false;
     int count = 0;
-    protected override void OnParametersSet()
-    {
-        if (msg == "update")
-        {
-            NotificationService.Notify(NotificationSeverity.Success, "congratulation", "update Successfully", 4000);
-        }
-        if (msg == "create")
-        {
-            NotificationService.Notify(NotificationSeverity.Success, "congratulation", "create Successfully", 4000);
-        }
-    }
+    private bool IsCreatbuttonDisabled => !(selecteditems == null || selecteditems.Count == 0);
+    private bool IsEditbuttonDisabled => selecteditems == null || selecteditems.Count != 1;
+    private bool IsDeletebuttonDisabled => selecteditems == null || selecteditems.Count == 0;
+    string pagingSummaryFormat = "Displaying page {0} of {1} <b>(total {2} records)</b>"; 
     protected override async Task OnInitializedAsync()
     {
+        
         await base.OnInitializedAsync();
-        var response = await service.GetAllAsync();
-        if (response != null && response.IsSuccess)
+        
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
         {
-
-            items = JsonConvert.DeserializeObject<List<CourseLevelDto>>(Convert.ToString(response.Result));
+            message = await LocalStorage.GetItemAsync<string>("message");
+            if (!string.IsNullOrEmpty(message))
+            {
+               
+                if (message == "create")
+                {
+                    NotificationService.Notify(NotificationSeverity.Success, "Course Level", "Item successfully created.", 4000);
+                }
+                if (message == "update")
+                {
+                    NotificationService.Notify(NotificationSeverity.Info, "Course Level", "Item successfully updated.", 4000);
+                }
+                await LocalStorage.RemoveItemAsync("message");
+            }
         }
-
+      
     }
     async Task LoadData(LoadDataArgs args)
     {
         isLoading = true;
         query.Filter = args.Filter;
-        query.OrderBy = args.OrderBy;
+        query.SortColumn = args.OrderBy?.Split(' ')[0] ?? "Name";
+        query.SortOrder = args.OrderBy?.EndsWith("desc") == true ? "desc" : "asc";
+        query.FilterColumn = args.Filters?.FirstOrDefault()?.Property ?? "";
+        query.FilterValue = args.Filters?.FirstOrDefault()?.FilterValue?.ToString() ?? "";
         query.Skip = args.Skip;
         query.Top = args.Top;
+        query.Page = args.Skip / args.Top + 1;
         var response = await service.GetGrid(query);
         // Update the Data property
+        //** performance issue check it later*/
         items = JsonConvert.DeserializeObject<IEnumerable<CourseLevelDto>>(Convert.ToString(response.Result));
         // Update the count
         count = response.Count;
@@ -92,7 +110,7 @@
         isLoading = false;
     }
     private async Task CreateAsync()
-    {
+    {        
         navManager.NavigateTo("/courselevel/create");
     }
     private void Edit()
@@ -142,11 +160,11 @@
             }
             else if (response.IsSuccess)
             {
-                grid.Reload();
-                NotificationService.Notify(NotificationSeverity.Success, "Congratulation!!", response.Message, 4000);
+                await grid.Reload();
+                NotificationService.Notify(NotificationSeverity.Info, response.Message);
                 return;
             }
         }
 
-    }
+    }     
 }

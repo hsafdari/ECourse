@@ -3,10 +3,13 @@
     public class GridQuery
     {
         //string filter, int? top, int? skip, string orderby
-        public string? filter { get; set; } = default!;
-        public int top { get; set; } = default!;
-        public int skip { get; set; } = default!;
-        public string? orderby { get; set; } = default!;
-        public string? select { get; set; } = default!;
+        public string sortColumn { get; set; } = "";
+        public string sortOrder { get; set; } = "";
+        public string filterColumn { get; set; } = "";
+        public string filterValue { get; set; } = "";
+        public int page { get; set; } = 1;
+        public int skip { get; set; } = 0;
+        public int top { get; set; } = 0;
+        public string Filter { get; set; } = "";
     }
 }

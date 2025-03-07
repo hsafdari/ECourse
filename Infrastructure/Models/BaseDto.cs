@@ -1,10 +1,8 @@
-﻿using MongoDB.Bson;
-
-namespace Infrastructure.Models
+﻿namespace Infrastructure.Models
 {
-    public abstract class BaseDto
+    public class BaseDto
     {
-        public string Id { get; set; }
+        public string Id { get; set; }=Guid.NewGuid().ToString();
         public DateTime CreateDateTime { get; set; } = DateTime.Now;
         public DateTime? ModifiedDateTime { get; set; }
         public bool IsDeleted { get; set; } = false;

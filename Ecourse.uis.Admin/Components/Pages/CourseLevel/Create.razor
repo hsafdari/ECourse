@@ -3,9 +3,10 @@
 @inject ICourseLevelService service;
 @inject NavigationManager navManager
 @inject NotificationService NotificationService;
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @rendermode InteractiveServer
 
-<Form pagetitle="Create New Item" model="@model" loading="@loading" OnValidSubmit="@Submit"></Form>
+<Form pagetitle="Add New Item" model="@model" loading="@loading" OnValidSubmit="@Submit"></Form>
 @code {
     public bool loading { get; set; } = false;
     CourseLevelDto model = new CourseLevelDto();
@@ -14,15 +15,24 @@
     {
         try
         {
-            loading = true;
+            loading = true;           
             var response = await service.CreateAsync(model);
             if (response != null && response.IsSuccess)
-            {
-                loading = false;                
-                navManager.NavigateTo("/courselevel/index/create");
+            {                             
+                await LocalStorage.SetItemAsStringAsync("message", "create");
+                navManager.NavigateTo("/courselevel/index/");
             }
+            else if (response != null && !response.IsSuccess)
+            {
+                NotificationService.Notify(NotificationSeverity.Error, response.Message);
+            }
+            else
+            {
+                throw new Exception("An error occurred while creating the item");
+            }
+            loading = false;
         }
-        catch (Exception ex)
+    catch (Exception ex)
         {
             NotificationService.Notify(NotificationSeverity.Error, ex.Message);
             loading = false;

@@ -2,10 +2,10 @@ using ECourse.Admin.Service;
 using ECourse.Admin.Service.CourseAPI;
 using ECourse.Admin.Utility;
 using ECourse.Admin.Components;
-using MudBlazor.Services;
 using ECourse.Admin.Service.FilesManager;
 using Radzen;
 using ECourse.Admin.Components.Layout;
+using Blazored.LocalStorage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +18,12 @@ builder.Services.AddHttpClient<ICourseLevelService, CourseLevelService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IFTPService, FTPService>();
 builder.Services.AddScoped<IFileManagerService, FileManagerService>();
-builder.Services.AddMudServices();
 builder.Services.AddRadzenComponents();
-SD.CourseAPIBase = builder.Configuration["ServiceUrls:CourseAPI"];
-SD.UploadMode =(FileUploadMode) Enum.Parse(typeof(FileUploadMode),builder.Configuration["FileUploadMode"]);
+
+SD.CourseAPIBase = builder.Configuration["ServiceUrls:CourseAPI"] ?? throw new Exception("Service Url not configured correctly");
+SD.UploadMode =(FileUploadMode) Enum.Parse(typeof(FileUploadMode),builder.Configuration["FileUploadMode"] ?? throw new Exception("FileUploadMode not configured correctly"));
 builder.Services.AddScoped<ICourseLevelService, CourseLevelService>();
+builder.Services.AddBlazoredLocalStorage();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

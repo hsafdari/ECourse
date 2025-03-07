@@ -1,11 +1,6 @@
-﻿using ECourse.Services.CourseAPI.Models;
-using Microsoft.AspNetCore.Http;
+﻿using ECourse.Services.CourseAPI.Interfaces;
+using ECourse.Services.CourseAPI.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MongoDB.Bson;
-using System.Diagnostics;
-using System.Linq.Dynamic.Core;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace ECourse.Services.CourseAPI.Controllers
 {
@@ -13,35 +8,28 @@ namespace ECourse.Services.CourseAPI.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        readonly IDbContextFactory<ApplicationDataContext> _dbContext;
-        public TestController(IDbContextFactory<ApplicationDataContext> dataContext)
+        private readonly ICourseLevelRepository _dataContext;
+        public TestController(ICourseLevelRepository dataContext)
         {
-            _dbContext = dataContext;
+            _dataContext = dataContext;
         }
         [HttpGet]
         public async Task<List<CourseLevel>> Index()
         {
-            using (var context = _dbContext.CreateDbContext())
-            {
-                var items = await context.CourseLevels.ToListAsync();
-                return items;
-            }
-               
+            return await _dataContext.GetAllAsync();
         }
         //[HttpPost]
-        //public async Task<List<CourseLevel>> post(int id)
+        //public async Task post(int id)
         //{
-        //    _dbContext.CourseLevels.Add(new CourseLevel()
+
+        //   await _dataContext.InsertOneAsync(new CourseLevel()
         //    {
         //        Icon = $"test{id}",
         //        Title = $"test{id}",
-        //        CreateDateTime = DateTime.Now,
+        //        //CreateDateTime = DateTime.Now,
         //        FileName = $"test{id}",
         //        FileLocation = $"test{id}"
         //    });
-        //    _dbContext.SaveChanges();
-        //    var items2 = await _dbContext.CourseLevels.ToListAsync();
-        //    return items2;
         //}
         //[HttpGet]
         //[Route("Index")]

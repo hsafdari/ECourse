@@ -1,48 +1,65 @@
 ﻿@using static ECourse.Admin.Utility.SD
-@using MudBlazor;
+@using FluentValidation
+@using ECourse.Admin.Models.CourseAPI.DtoValidators
 @inject NavigationManager navManager
 @inject IFileManagerService _FileManagerService
+@inject NotificationService NotificationService;
 
 <EditForm FormName="courselevelentry" Context="AddForm" id="frm" Model="model" OnValidSubmit="OnValidSubmit" loading="@loading" class="container">
-    <DataAnnotationsValidator />
-    <ValidationSummary></ValidationSummary>
-    <h2 class="card-title">Course Level Management</h2>
-    <h3>@PageTitle</h3>
-    <div class="container-fluid pb-15">
-        <div class="mb-3 row">            
-            <RadzenTextBox id="txtTitle" @bind-Value="@model.Title" Label="Title" Variant="Variant.Text"></RadzenTextBox>
+    <FluentValidationValidator TValidator="CourseLevelDtoValidator"/>
+    <h3 class="card-title">Course Level</h3>
+    <hr />
+    <div class="card">
+        <h5 class="card-header">@PageTitle</h5>
+
+        <div class="card-body">
+            <div class="form-group">
+                <label for="txtTitle">Course Level Title</label>
+                <input id="txtTitle" type="text" @bind-value="@model.Title" autocomplete="off" class="form-control" />
+                <ValidationMessage For="@(() => model.Title)" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <div class="mb-3 row">
+                    <div class="col-md-4">
+                        <label for="fileUploadIcon">Please upload an icon</label>
+                        <RadzenUpload id="fileUploadIcon" Multiple="false"
+                        Accept="image/*"
+                        @bind-value="@model.FileLocation"
+                        MaxFileSize="1000000"
+                        Change="OnFileUpload"
+                        Style="width: 100%"
+                        class="form-control"
+                        InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "select file" }})" />
+                        <ValidationMessage For="@(() => model.FileLocation)" class="text-danger" />
+                    </div>
+                    @if (!string.IsNullOrEmpty(model.FileLocation))
+                    {
+                        <div class="col-md-4">
+                            <label for="imgIcon">Icon Uploaded</label>
+                            <div class="col-md-12">
+                                <img id="imgIcon" src="@model.Icon" style="width:50px;height:50px" />
+                                @if (!PageTitle.Contains("Edit"))
+                                {
+                                    <button type="button" class="btn btn-danger" @onclick="RemoveFile" value="Remove">Remove <i class="bi-x-circle"></i></button>
+                                }
+                            </div>
+                        </div>
+
+                    }
+                </div>
+            </div>
+            @if (loading)
+            {
+                <div class="d-flex align-items-center">
+                    <div>Loading... <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div></div>
+                </div>
+            }
         </div>
-        <div class="mb-3 row ">
-            <div class="col-md-4">
-                <MudFileUpload T="IBrowserFile" FilesChanged="UploadFiles"> 
-                    <ButtonTemplate Context="fileInput">
-                        <MudButton HtmlTag="label"
-                                   Variant="MudBlazor.Variant.Filled"
-                                   Color="Color.Primary"
-                                   StartIcon="@Icons.Material.Filled.CloudUpload"
-                                   >
-                            Upload Icon
-                        </MudButton>
-                    </ButtonTemplate>
-                </MudFileUpload>                
+        <div class="row mb-2 fixed-bottom d-flex justify-content-center">
+            <div class="col-md-12 text-center">
+                <RadzenButton Disabled=@loading Class="col-md-2" ButtonType="Radzen.ButtonType.Submit" Variant="Radzen.Variant.Filled" Color="Color.Success" StartIcon="@IconStyle.Success">@ButtonText</RadzenButton>
+                <RadzenButton Class="col-md-2" Variant="Radzen.Variant.Outlined" StartIcon="@IconStyle.Light" Click="BackToindex">Cancel</RadzenButton>
             </div>
-            <div class="col-md-4">
-                <img src="@model.Icon" style="width:50px;height:50px" />
-            </div>
-        </div>
-        @if(loading)
-        {
-            <div class="d-flex align-items-center">
-                <strong>Loading...</strong>
-                <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
-            </div>
-        }
-       
-    </div>
-    <div class="row mb-2 fixed-bottom d-flex justify-content-center">
-        <div class="col-md-12 text-center">           
-            <RadzenButton Disabled=@loading Class="col-md-2" ButtonType="Radzen.ButtonType.Submit" Variant="Radzen.Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Material.Filled.Save">@ButtonText</RadzenButton>
-            <RadzenButton Class="col-md-2" Variant="Radzen.Variant.Filled" StartIcon="@Icons.Material.Filled.Cancel" Click="BackToindex">Cancel</RadzenButton>
         </div>
     </div>
 </EditForm>
@@ -56,27 +73,59 @@
     [Parameter]
     public bool loading { get; set; }
     [Parameter]
-    public EventCallback OnValidSubmit { get; set; }
-    private async void UploadFiles(IBrowserFile file)
+    public EventCallback OnValidSubmit { get; set; }    
+    private async Task OnFileUpload(Radzen.UploadChangeEventArgs args)
     {
-        loading = true;
-        var result = await _FileManagerService.UploadFileAsync(file, "CourseLevel", model.FileLocation);
-        if (result.IsSuccess)
+        if (args.Files.Count() > 0)
         {
-            if (result.Result != null)
+            loading = true;
+            var uploadedFile = args.Files.FirstOrDefault();
+            var result = await _FileManagerService.UploadFileAsync(uploadedFile, "CourseLevel", model.FileLocation);
+            if (result != null && result.IsSuccess)
             {
-                string[] items = result.Result.ToString().Split(";");
-                model.FileName = file.Name;
-                model.FileLocation = items[0];
-                model.Icon = items[1];
+                if (result.Result != null)
+                {
+                    string[] items = result.Result.ToString().Split(";");
+                    model.FileName = uploadedFile.Name;
+                    model.FileLocation = items[0];
+                    model.Icon = items[1];
+                    NotificationService.Notify(NotificationSeverity.Success, "congratulation", "image uploaded Successfully", 4000);
+                }
+            }
+            else
+            {
+                NotificationService.Notify(NotificationSeverity.Error, "error", result.Message, 6000);
+            }
+            loading = false;
+            StateHasChanged();
+        }
+    }
+    private async Task RemoveFile()
+    {
+        try
+        {
+            var result = await _FileManagerService.DeleteFileAsync(model.FileLocation);
+            if (result.IsSuccess)
+            {
+                NotificationService.Notify(NotificationSeverity.Success, "congratulation", result.Message, 4000);
+                model.FileName = null;
+                model.FileLocation = null;
+                model.Icon = null;
+            }
+            else
+            {
+                NotificationService.Notify(NotificationSeverity.Error, "error", result.Message, 6000);
+            }
+        }
+        catch (Exception ex)
+        {
 
-            }            
-        }        
-        loading = false;
+            NotificationService.Notify(NotificationSeverity.Error, "error", ex.Message, 6000);
+        }
         StateHasChanged();
     }
     async Task BackToindex()
     {
         navManager.NavigateTo("/courselevel/index");
-    }
+    }    
 }

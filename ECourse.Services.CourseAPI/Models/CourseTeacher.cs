@@ -5,7 +5,8 @@ namespace ECourse.Services.CourseAPI.Models
 {
     public class CourseTeacher:BaseEntity
     {
-        public ObjectId TeacherId { get; set; }
+        //map with user Id
+        public ObjectId UserId { get; set; }
         public ObjectId CourseId { get; set; }
     }
 }

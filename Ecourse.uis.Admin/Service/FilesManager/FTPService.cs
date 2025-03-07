@@ -28,7 +28,7 @@ namespace ECourse.Admin.Service.FilesManager
             RemoteRootFolder = _Configuration["FTP:RemoteRootFolder"] ?? "";
             RootBrowseFile = _Configuration["FTP:Rootbrowsefile"] ?? "";
         }
-        public async void Delete(string remoteFileName)
+        public async Task<ResponseDto> Delete(string remoteFileName)
         {
             try
             {
@@ -39,10 +39,29 @@ namespace ECourse.Admin.Service.FilesManager
                 if (isFileExist)
                 {
                     await client.DeleteFile(remoteFileName);
-                }                           
+                    return new ResponseDto()
+                    {
+                        IsSuccess = true,
+                        Message = "Image Deleted Successfully!!!"                        
+                    };
+                }
+                else
+                {
+                    return new ResponseDto()
+                    {
+                        IsSuccess = false,
+                        Message = "Image Not Exist!!"
+                    };
+                }
             }
             catch (Exception ex)
-            {               
+            {
+                return new ResponseDto()
+                {
+                    IsSuccess = false,
+                    Message = ex.Message,
+                    Result = ex
+                };
                 throw;
             }
             
@@ -61,7 +80,7 @@ namespace ECourse.Admin.Service.FilesManager
                     new Exception("wwwroot does not exist");
                 }
                 string RemoteDirectoryName=DirectoryFull.Substring(IndexRoot).Replace("\\","/");
-                RootBrowseFile = RootBrowseFile + RemoteDirectoryName;
+                string RemoteSite = RootBrowseFile + RemoteDirectoryName;
                 RemoteDirectoryName = RemoteRootFolder + RemoteDirectoryName;
                 var client = new AsyncFtpClient(FTPHost, FTPUserName, FTPPassword, FTPPort);
                 client.Config.RetryAttempts = int.Parse(_Configuration["FTP:RetryAttempts"] ?? "3");                
@@ -75,7 +94,7 @@ namespace ECourse.Admin.Service.FilesManager
                 {
                     IsSuccess = result.IsSuccess(),
                     Message = "Uploaded successfully",
-                    Result = $"{"/"+ RemoteDirectoryName +"/"+ NewFileName};{Domain+"/"+RootBrowseFile + "/" + NewFileName}"
+                    Result = $"{"/"+ RemoteDirectoryName +"/"+ NewFileName};{Domain+"/"+ RemoteSite + "/" + NewFileName}"
                 };
             }
             catch (Exception ex)

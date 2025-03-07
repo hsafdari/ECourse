@@ -2,3 +2,9 @@
 {
     left:0;
 }
+button > i {
+    padding-left: 5px;
+}
+.form-group {
+    padding-bottom: 2%;
+}

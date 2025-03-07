@@ -5,6 +5,6 @@ namespace ECourse.Admin.Service.FilesManager
     public interface IFTPService
     {
         Task<ResponseDto> UploadAsync(string localFileAddress);
-        void Delete(string remoteFileName);
+        Task<ResponseDto> Delete(string remoteFileName);
     }
 }

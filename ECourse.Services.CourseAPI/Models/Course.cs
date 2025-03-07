@@ -21,7 +21,7 @@ namespace ECourse.Services.CourseAPI.Models
         /// number of buyers who rate this course
         /// </summary>
         public int RateCount { get; set; } = 0;
-        //bind to Teacher 
+        //each course has multiple Teacher
         public List<CourseTeacher> Teachers { get;set; } = null!;
         public required ObjectId LevelId { get; set; }
         public List<CourseSection> Sections { get; init; } = null!;

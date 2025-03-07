@@ -1,11 +1,14 @@
-﻿using Infrastructure.Models;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Bson;
+using Infrastructure.Models;
+
 namespace ECourse.Services.CourseAPI.Models
 {
     /// <summary>
     /// each course has multiple level for example Basic, Intermediate and advance
     /// </summary>
     public class CourseLevel:BaseEntity
-    {
+    {    
         public static readonly string DocumentName = nameof(CourseLevel);
         /// <summary>
         /// The name of courseTitle like Basic, Intermediate, Advance and ...

@@ -1,5 +1,5 @@
 ﻿using ECourse.Admin.Models;
-using Radzen;
+using ECourse.Admin.Utility;
 
 namespace ECourse.Admin.Service
 {
@@ -11,6 +11,6 @@ namespace ECourse.Admin.Service
         Task<ResponseDto?> UpdateAsync(TModel entity);
         Task<ResponseDto?> DeleteAsync(string id);
         Task<ResponseDto?> DeleteAsync(List<string> ids);
-        Task<ResponseDto?> GetGrid(Query query);
+        Task<ResponseDto?> GetGrid(GridQuery query);
     }
 }

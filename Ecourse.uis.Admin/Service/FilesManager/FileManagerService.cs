@@ -1,7 +1,6 @@
 ﻿using ECourse.Admin.Models;
 using ECourse.Admin.Utility;
 using Microsoft.AspNetCore.Components.Forms;
-using System.IO;
 
 namespace ECourse.Admin.Service.FilesManager
 {
@@ -18,18 +17,13 @@ namespace ECourse.Admin.Service.FilesManager
             _WebHostEnvironment = webHostEnvironment;
         }
 
-        public ResponseDto DeleteFile(string fileName)
+        public async Task<ResponseDto> DeleteFileAsync(string fileName)
         {
             switch (SD.UploadMode)
             {
                 case FileUploadMode.FTP:
                     {
-                        _FTPService.Delete(fileName);
-                        return new ResponseDto
-                        {
-                            IsSuccess = true,
-                            Message = "File Deleted"
-                        };
+                        return await _FTPService.Delete(fileName);                        
                     }
                 case FileUploadMode.AzureBlob:
                     {
@@ -44,9 +38,9 @@ namespace ECourse.Admin.Service.FilesManager
         {
             if (!string.IsNullOrEmpty(previousIcon))
             {
-                DeleteFile(previousIcon);
+                await DeleteFileAsync(previousIcon);
             }
-            string url = _HttpContext.HttpContext.Request.Host.Value;
+            //string url = _HttpContext.HttpContext.Request.Host.Value;
             string path = $"{_WebHostEnvironment.WebRootPath}\\Uploads\\{serviceName}";
             if (!Directory.Exists(path))
             {
@@ -64,12 +58,9 @@ namespace ECourse.Admin.Service.FilesManager
                         if (result.IsSuccess)
                         {
                             File.Delete(path);
-                            return result;
+                           
                         }
-                        else
-                        {
-                            return new ResponseDto();
-                        }
+                        return result;
 
                     }
                 case FileUploadMode.AzureBlob:

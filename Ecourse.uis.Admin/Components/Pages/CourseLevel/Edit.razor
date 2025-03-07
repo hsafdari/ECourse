@@ -4,6 +4,7 @@
 @inject NavigationManager navManager
 @inject ICourseLevelService service;
 @inject NotificationService NotificationService;
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @rendermode InteractiveServer
 
 <Form PageTitle="Edit" model="@model" loading="@loading" OnValidSubmit="@Submit"></Form>
@@ -30,7 +31,8 @@
             if (response != null && response.IsSuccess)
             {
                 loading = false;
-                navManager.NavigateTo("/courselevel/index/update");
+                await LocalStorage.SetItemAsStringAsync("message", "update");
+                navManager.NavigateTo("/courselevel/index");
             }
         }
         catch (Exception ex)
