@@ -21,7 +21,7 @@
     <PackageReference Include="MongoDB.Bson" Version="3.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NUnit" Version="4.3.2" />
-    <PackageReference Include="Radzen.Blazor" Version="6.2.4" />
+    <PackageReference Include="Radzen.Blazor" Version="6.2.9" />
   </ItemGroup>
 
   <ItemGroup>
