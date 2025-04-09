@@ -4,9 +4,9 @@
 @using ECourse.Admin.Service.CourseAPI;
 @using Newtonsoft.Json;
 @inject NavigationManager navManager;
-@inject ICourseLevelService service;
 @inject NotificationService NotificationService;
 @inject Radzen.DialogService DialogService;
+@inject ICourseLevelService service;
 @inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @rendermode InteractiveServer
 <PageTitle>Course Level</PageTitle>
@@ -17,15 +17,16 @@
     <button class="btn btn-primary" disabled="@IsEditbuttonDisabled" onclick="@Edit">Edit<i class="bi-pencil-square"></i></button>
     <button class="btn btn-danger" disabled="@IsDeletebuttonDisabled" onclick="@Del">Remove <i class="bi-x-circle"></i></button>
 </div>
-<RadzenDataGrid @ref="grid" @bind-Value=@selecteditems SelectionMode="DataGridSelectionMode.Multiple" KeyProperty="Id" IsLoading="@isLoading" Count="@count" Data="@items"
+<RadzenDataGrid @ref="grid" @bind-Value="@selecteditems" SelectionMode="DataGridSelectionMode.Multiple" KeyProperty="Id" IsLoading="@isLoading" Count="@count" Data="@items"
 LoadData="@LoadData" FilterPopupRenderMode="PopupRenderMode.OnDemand" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" ShowPagingSummary="true" PagingSummaryFormat="@pagingSummaryFormat"
 FilterMode="FilterMode.Advanced" AllowSorting="true" AllowFiltering="true" AllowPaging="true" PageSize="20" PageSizeOptions="@pageSizeOptions"
 PagerHorizontalAlign="HorizontalAlign.Center" ColumnWidth="200px">
     <Columns>
         <RadzenDataGridColumn Width="60px" Sortable="false" Filterable="false" TextAlign="TextAlign.Center">
             <HeaderTemplate>
-                <RadzenCheckBox TriState="false" TValue="bool?" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select all items" }})" Change="@(args => selecteditems = args == true?(selecteditems ??Enumerable.Empty<CourseLevelDto>()).Union(items.Where(i => !(selecteditems ?? Enumerable.Empty<CourseLevelDto>()).Select(e => e.Id).Contains(i.Id))).ToList() : null)"
-                Value="@(selecteditems == null || selecteditems?.Any() != true ? false : !items.All(i => selecteditems.Select(e => e.Id).Contains(i.Id)) ? null : items.Any(i => selecteditems.Select(e => e.Id).Contains(i.Id)))" />
+                <RadzenCheckBox TriState="false" TValue="bool?" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select all items" }})"
+                Value="@(selecteditems == null || selecteditems?.Any() != true ? false : !items.All(i => selecteditems.Select(e => e.Id).Contains(i.Id)) ? null : items.Any(i => selecteditems.Select(e => e.Id).Contains(i.Id)))" 
+                Change="@(args => selecteditems = args == true?(selecteditems ??Enumerable.Empty<CourseLevelDto>()).Union(items.Where(i => !(selecteditems ?? Enumerable.Empty<CourseLevelDto>()).Select(e => e.Id).Contains(i.Id))).ToList() : null)"/>
             </HeaderTemplate>
             <Template Context="data">
                 <RadzenCheckBox TriState="false" Value="@(selecteditems != null && selecteditems.Select(e => e.Id).Contains(data.Id))" InputAttributes="@(new Dictionary<string,object>(){ { "aria-label", "Select item" }})"

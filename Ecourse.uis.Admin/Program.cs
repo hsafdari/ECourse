@@ -15,6 +15,7 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICourseLevelService, CourseLevelService>();
+builder.Services.AddHttpClient<ICourseGroupService, CourseGroupService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IFTPService, FTPService>();
 builder.Services.AddScoped<IFileManagerService, FileManagerService>();
@@ -23,6 +24,7 @@ builder.Services.AddRadzenComponents();
 SD.CourseAPIBase = builder.Configuration["ServiceUrls:CourseAPI"] ?? throw new Exception("Service Url not configured correctly");
 SD.UploadMode =(FileUploadMode) Enum.Parse(typeof(FileUploadMode),builder.Configuration["FileUploadMode"] ?? throw new Exception("FileUploadMode not configured correctly"));
 builder.Services.AddScoped<ICourseLevelService, CourseLevelService>();
+builder.Services.AddScoped<ICourseGroupService, CourseGroupService>();
 builder.Services.AddBlazoredLocalStorage();
 var app = builder.Build();
 

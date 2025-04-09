@@ -1,0 +1,260 @@
+﻿@page "/courseGroups/index"
+@using ECourse.Admin.Models
+@using ECourse.Admin.Models.CourseAPI.CourseGroup
+@using ECourse.Admin.Service.CourseAPI
+@using Newtonsoft.Json
+@using Radzen
+@using System.Linq
+@inject NavigationManager navManager;
+@inject NotificationService NotificationService;
+@inject Radzen.DialogService DialogService;
+@rendermode InteractiveServer
+@inject ICourseGroupService _courseGroupService
+<PageTitle>Course Group Management</PageTitle>
+<div class="card">
+    <h5 class="card-header">Course Group</h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="row-fluid">
+                    <button class="btn btn-primary" disabled="@IsEditbuttonDisabled" onclick="@Edit">Edit<i class="bi-pencil-square"></i></button>
+                    <button class="btn btn-danger" disabled="@IsDeletebuttonDisabled" onclick="@Remove">Remove <i class="bi-x-circle"></i></button>
+                    <button class="btn btn-secondary" disabled="@IsButtonDisabled" onclick="@ClearSelection">Clear Selection <i class="bi bi-eraser"></i></button>
+                    <button class="btn btn-secondary" onclick="@Refresh">Refresh <i class="bi bi-arrow-clockwise"></i></button>
+                </div>
+                <div class="row">
+                    <q>Use drag-and-drop to move items and set them as parent or children</q>
+                    <RadzenTree @ref="@tree" AllowCheckBoxes="true" Data="@CourseGroups" ItemRender="ItemRender" Expand="@OnExpand" @bind-Value=@selecteditem @bind-CheckedValues=@selecteditems>
+                        <RadzenTreeLevel TextProperty="Title" HasChildren=@(e=>(e as CourseGroupDto).HasChildren) />
+                    </RadzenTree>
+                </div>
+            </div>
+            <!-- Add New Course Group -->
+            <div class="col-md-7">
+                <EditForm FormName="courseGroupEntry" Context="AddEditForm" id="frm" Model="model" class="container-fluid">
+                    @* <FluentValidationValidator TValidator="CourseLevelDtoValidator"/> *@
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="txtIsParent">Is Parent</label>
+                            <input id="chkIsParent" disabled="@this.IsDisable" type="checkbox" @bind="@IsChecked" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtTitle">Title</label>
+                            <input id="txtTitle" type="text" @bind-value="@model.Title" autocomplete="off" class="form-control" />
+                            <ValidationMessage For="@(() => model.Title)" class="text-danger" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtCustomCode">CustomCode</label>
+                            <input id="txtCustomCode" type="text" @bind-value="@model.CustomCode" autocomplete="off" class="form-control" />
+                            <ValidationMessage For="@(() => model.CustomCode)" class="text-danger" />
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" @onclick="AddNewGroup">@submitText</button>
+                    <button class="btn btn-light" onclick="@ClearSelection">Cancel</button>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<CourseGroupDto> CourseGroups { get; set; } = new();
+    private List<CourseGroupDto> SelectedGroups { get; set; } = new();
+    private CourseGroupDto? EditingGroup;
+    private CourseGroupDto model = new();
+    public bool IsChecked { get; set; }
+    private bool IsDisable { get; set; } = false;
+    private string submitText = "Save";   
+    RadzenTree tree = new();
+    private object selecteditem;
+    private string selectionId;
+    IEnumerable<object> checkedValues;
+    IEnumerable<object> selecteditems { get; set; }
+    private CourseGroupDto draggedItem;
+    async Task OnExpand(TreeExpandEventArgs args)
+    {
+        var courseGroupItem = args.Value as CourseGroupDto;
+        var childrenResult = await _courseGroupService.GetChildren(courseGroupItem.Id);
+        var childrenData = JsonConvert.DeserializeObject<List<CourseGroupDto>>(childrenResult.Result.ToString());
+        args.Children.Data = childrenData;        
+        args.Children.TextProperty = "Title";
+        args.Children.HasChildren = (e=>(e as CourseGroupDto).HasChildren);
+    }
+    private async Task LoadData()
+    {
+        var courseGroupResult = await _courseGroupService.GetRoot();
+        CourseGroups = JsonConvert.DeserializeObject<List<CourseGroupDto>>(courseGroupResult.Result.ToString());
+        StateHasChanged();
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadData();
+    }
+    private bool IsEditbuttonDisabled => selecteditem == null;
+    private bool IsDeletebuttonDisabled => selecteditems == null || selecteditems.Count() == 0;
+    private bool IsButtonDisabled => selecteditems == null || selecteditems.Count() == 0;
+    private async Task AddNewGroup()
+    {
+        if (submitText == "Save")
+        {
+            model.ParentId = IsChecked ? null : ((CourseGroupDto)selecteditem).Id;
+            await _courseGroupService.CreateAsync(model);
+            NotificationService.Notify(NotificationSeverity.Success, "Course Group", "Item successfully created.", 4000);
+        }
+        else if(submitText=="update")
+        {
+            await _courseGroupService.UpdateAsync(model);
+            NotificationService.Notify(NotificationSeverity.Info, "Course Group", "Item successfully updated.", 4000);           
+        }    
+        await Refresh();
+    }
+    private void AddChildGroup(CourseGroupDto parent)
+    {
+        if (parent.Children == null) parent.Children = new List<CourseGroupDto>();
+
+        parent.Children.Add(new CourseGroupDto { Id = Guid.NewGuid().ToString(), Title = "New Subgroup", ParentId = parent.Id });
+    }
+    private void DeleteGroup(CourseGroupDto group)
+    {
+        CourseGroups.RemoveAll(g => g.Id == group.Id || g.ParentId == group.Id);
+    }
+    private void DeleteSelected()
+    {
+        foreach (var group in SelectedGroups.ToList())
+        {
+            DeleteGroup(group);
+        }
+        SelectedGroups.Clear();
+    }     
+    private void onChange()
+    {
+        // if (selecteditem is CourseGroupDto courseGroupDto)
+        // {   
+        //     if (selecteditems is null)
+        //     {
+        //         selecteditems = new List<CourseGroupDto>();
+        //     }
+        //     selecteditems.Add(courseGroupDto);          
+        // }
+    }
+    private void StartEditing(RadzenTreeItem group)
+    {
+
+    }
+    private void SaveEdit(CourseGroupDto group)
+    {
+        EditingGroup = null;
+    }
+    private void CancelEdit()
+    {
+        EditingGroup = null;
+    }
+    private void ClearSelection()
+    {
+        model = new CourseGroupDto();
+        IsChecked = false;
+        IsDisable = false;              
+        if (SelectedGroups.Count>0) SelectedGroups.Clear();
+        selecteditems = null;
+        selecteditem = null;
+        tree.ClearSelection();
+        submitText = "Save";        
+    }
+    private void Edit()
+    {
+        if (selecteditem == null)
+        {
+            NotificationService.Notify(NotificationSeverity.Warning, "warning!!", "select just one item", 4000);
+            return;
+        }
+        //var item = selecteditem;
+        //var row = selecteditems.FirstOrDefault();
+        if (selecteditem != null)
+        {
+            model = (CourseGroupDto)selecteditem;
+            IsChecked = model.ParentId == null ? true : false;
+            IsDisable = true;
+            submitText = "update";
+        }
+
+    }
+    private async void Remove()
+    {
+        if (selecteditems == null || selecteditems.Count() == 0)
+        {
+            NotificationService.Notify(NotificationSeverity.Warning, "warning!!", "select just one row", 4000);
+            return;
+        }
+        else
+        {
+            var rows = selecteditems.Cast<CourseGroupDto>().ToList();
+            ResponseDto? response = new();
+            //confirm
+            bool? confirmed = await DialogService.Confirm("Are you sure?", "Delete Alert", new ConfirmOptions() { OkButtonText = "Yes", CancelButtonText = "No" });
+            if (confirmed is null || confirmed.Value == false)
+            {
+                return;
+            }
+            if (rows.Count == 1)
+            {
+                response = await _courseGroupService.DeleteAsync(rows[0].Id);
+            }
+            else if (rows.Count > 1)
+            {
+                List<string> ids = rows.Select(x => x.Id).ToList();
+                response = await _courseGroupService.DeleteAsync(ids);
+            }
+            if (response is null || response.IsSuccess == false)
+            {
+                NotificationService.Notify(NotificationSeverity.Error, "Error!!", "delete(s) operation failed", 4000);
+                return;
+            }
+            else if (response.IsSuccess)
+            {
+                await Refresh();
+                NotificationService.Notify(NotificationSeverity.Info, response.Message);
+                return;
+            }
+        }       
+    }
+    private async Task Refresh()
+    {
+        ClearSelection();
+        CourseGroups = null;
+        await LoadData();
+        StateHasChanged();
+    }   
+    private void ItemRender(TreeItemRenderEventArgs args)
+    {
+        var item = args.Value as CourseGroupDto; 
+        // Allow drag of all items except the root item.
+        if (item!=null && item.ParentId != null)
+        {
+            args.Attributes.Add("title", "Drag item to reorder");
+            args.Attributes.Add("style", "cursor:grab");
+            args.Attributes.Add("draggable", "true");
+            args.Attributes.Add("ondragstart", EventCallback.Factory.Create<DragEventArgs>(this, () =>
+            {
+                if (draggedItem == null)
+                {
+                    draggedItem = item;
+                }
+            }));
+        }
+        // Allow drop over any item including the root item.
+        args.Attributes.Add("ondragover", "event.preventDefault()");
+        args.Attributes.Add("ondrop", EventCallback.Factory.Create<DragEventArgs>(this, async () =>
+        {
+            if (draggedItem != null && draggedItem != item &&
+                    draggedItem.ParentId != item.Id &&
+                    draggedItem.Id != item.ParentId)
+            {
+                draggedItem.ParentId = item.Id;
+                await _courseGroupService.UpdateParent(draggedItem.ParentId, draggedItem.Id);               
+                draggedItem = null;
+                await Refresh();
+            }
+        }));
+    }
+}

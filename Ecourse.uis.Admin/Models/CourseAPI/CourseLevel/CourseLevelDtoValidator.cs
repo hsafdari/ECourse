@@ -1,7 +1,6 @@
-﻿using ECourse.Admin.Models.CourseAPI.CourseLevel;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace ECourse.Admin.Models.CourseAPI.DtoValidators
+namespace ECourse.Admin.Models.CourseAPI.CourseLevel
 {
     public class CourseLevelDtoValidator : AbstractValidator<CourseLevelDto>
     {

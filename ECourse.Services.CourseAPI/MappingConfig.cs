@@ -11,7 +11,7 @@ namespace ECourse.Services.CourseAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<CourseLevelDto, CourseLevel>().ReverseMap();
-                //config.CreateMap<CourseDto,Course>().ReverseMap();
+                config.CreateMap<CourseGroupDto, CourseGroup>().ReverseMap();
                 //config.CreateMap<CoursePriceDto, CoursePrice>().ReverseMap();
                 //config.CreateMap<CourseSectionDto, CourseSection>().ReverseMap();
                 //config.CreateMap<CourseItemDto, CourseItem>().ReverseMap();

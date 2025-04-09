@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="Repositories\CourseGroupRepository.cs" />
     <Compile Include="Repositories\CourseLevelRepository.cs" />
   </ItemGroup>
 

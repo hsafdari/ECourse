@@ -22,7 +22,7 @@ namespace ECourse.Admin.Service
             _tokenProvider = tokenProvider;
 
         }
-        private async Task<ResponseDto?> SendAsync(RequestDto requestDto, bool withBearer = false)
+        protected async Task<ResponseDto?> SendAsync(RequestDto requestDto, bool withBearer = false)
         {
             try
             {
