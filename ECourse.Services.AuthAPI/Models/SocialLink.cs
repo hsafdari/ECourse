@@ -1,12 +1,11 @@
-﻿using Infrastructure.Models;
-
+﻿
 namespace ECourse.Services.AuthAPI.Models
 {
     /// <summary>
     /// Here we define social networks which may be used by users and teachers
     /// such as youtube, facebook, instagram and ....
     /// </summary>
-    public class SocialLink : BaseEntity
+    public class SocialLink
     {
         public static readonly string DocumentName = nameof(SocialLink);
         /// <summary>

@@ -8,7 +8,8 @@
         "ecourse.services.authapi": "StartDebugging",
         "ecourse.services.blogapi": "StartDebugging",
         "ecourse.services.orderapi": "StartDebugging",
-        "ecourse.admin": "StartDebugging"
+        "ecourse.admin": "StartDebugging",
+        "ecourse.services.course.api": "StartDebugging"
       }
     }
   }

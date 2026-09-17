@@ -1,0 +1,7 @@
+@ECourse.Services.CourseAPI_HostAddress = http://localhost:5191
+
+GET {{ECourse.Services.CourseAPI_HostAddress}}/CourseGroups/{id}
+
+Accept: application/json
+
+###

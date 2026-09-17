@@ -1,8 +1,8 @@
-﻿using Infrastructure.Models;
+﻿
 
 namespace ECourse.Services.AuthAPI.Models.Dto
 {
-    public class SocialLinkDto:BaseDto
+    public class SocialLinkDto
     {
         /// <summary>
         /// Name of social media

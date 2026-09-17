@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Abstractions\Messaging\**" />
+    <Compile Remove="Common\Pagination\**" />
+    <Compile Remove="Common\Results\**" />
+    <EmbeddedResource Remove="Abstractions\Messaging\**" />
+    <EmbeddedResource Remove="Common\Pagination\**" />
+    <EmbeddedResource Remove="Common\Results\**" />
+    <None Remove="Abstractions\Messaging\**" />
+    <None Remove="Common\Pagination\**" />
+    <None Remove="Common\Results\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Abstractions\Services\" />
+    <Folder Include="Features\CourseGroups\Active\" />
+    <Folder Include="Features\CourseGroups\DeActive\" />
+    <Folder Include="Features\CourseGroups\Shared\" />
+    <Folder Include="Features\CoursePrices\Commands\" />
+    <Folder Include="Features\CoursePrices\Queries\" />
+    <Folder Include="Features\CourseSections\Commands\" />
+    <Folder Include="Features\CourseSections\Queries\" />
+    <Folder Include="Features\CourseTeachers\Commands\" />
+    <Folder Include="Features\CourseTeachers\Dtos\" />
+    <Folder Include="Features\CourseTeachers\Queries\" />
+    <Folder Include="Features\CourseItems\Commands\" />
+    <Folder Include="Features\CourseItems\Queries\" />
+    <Folder Include="Features\CourseLevels\Commands\" />
+    <Folder Include="Features\CourseLevels\Queries\" />
+    <Folder Include="Features\Courses\Commands\" />
+    <Folder Include="Features\Courses\Queries\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ECourse.Services.Course.Domain\ECourse.Services.Course.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="12.1.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+    <PackageReference Include="MediatR" Version="14.2.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />
+  </ItemGroup>
+	<ItemGroup>
+		<InternalsVisibleTo Include="ECourse.Services.Course.Application.UnitTests" />
+	</ItemGroup>
+
+</Project>

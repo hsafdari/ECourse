@@ -1,43 +1,7 @@
-version: '3.0'
 services:
-  ecourse.services.courseapi:
-    volumes:
-      - ./ecourse.services.courseapi:/app
-      - /app/bin
-      - /app/obj
+  course-api:
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    command: ["dotnet", "watch", "run", "--no-launch-profile"] 
-
-  ecourse.services.authapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
     ports:
-      - "8080"
-
-
-  ecourse.services.blogapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-    ports:
-      - "8080"
-
-
-  ecourse.services.orderapi:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_HTTP_PORTS=8080
-    ports:
-      - "8080"
-
-
-  ecourse.admin:
-    environment:
-      - DOTNET_USE_POLLING_FILE_WATCHER=1  
-    volumes:
-      - ./ecourse.admin:/app
-      - /app/bin
-      - /app/obj
-    command: ["dotnet", "watch", "run", "--no-launch-profile"]
+      - "5001:8080"

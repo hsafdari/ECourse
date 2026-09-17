@@ -1,53 +1,41 @@
-version: '3.0'
-
 services:
-  mongo:
-    image: 'mongo'
-    ports:
-        - 27017:27017
-  ecourse.services.authapi:
-    image: ${DOCKER_REGISTRY-}ecourseservicesauthapi
-    build:
+  course-api:
+    image: course-api
+    build:      
       context: .
-      dockerfile: ECourse.Services.AuthAPI/Dockerfile
-    depends_on:
-        - mongo
+      dockerfile: src/services/Course/ECourse.Services.Course.API/Dockerfile
     ports:
-        - 4001:8080
-  ecourse.services.blogapi:
-    image: ${DOCKER_REGISTRY-}ecourseservicesblogapi
-    build:
-      context: .
-      dockerfile: ECourse.Services.BlogAPI/Dockerfile
+      - "5001:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:8080
+      ConnectionStrings__CourseDatabase: >-
+        Host=course-database;
+        Port=5432;
+        Database=ecourse_course;
+        Username=postgres;
+        Password=A@123_Hgv
     depends_on:
-        - mongo
+      course-database:
+        condition: service_healthy
+
+  course-database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ecourse_course
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: A@123_Hgv
     ports:
-        - 4002:8080    
-  ecourse.services.courseapi:
-    image: ${DOCKER_REGISTRY-}ecourseservicescourseapi
-    build:
-      context: .
-      dockerfile: ECourse.Services.CourseAPI/Dockerfile
-    depends_on:
-        - mongo
-    ports:
-        - 4003:8080    
-  ecourse.services.orderapi:
-    image: ${DOCKER_REGISTRY-}ecourseservicesorderapi
-    build:
-      context: .
-      dockerfile: ECourse.Services.OrderAPI/Dockerfile
-    depends_on:
-        - mongo
-    ports:
-        - 4004:8080    
-  ecourse.admin:
-    image: ${DOCKER_REGISTRY-}ecourseadmin
-    build:
-      context: .
-      dockerfile: Ecourse.uis.Admin/Dockerfile
-    depends_on:
-        - mongo
-    ports:
-        - 4005:8080
-    
+      - "5433:5432"
+    volumes:
+      - course-database-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - pg_isready -U postgres -d ecourse_course
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  course-database-data:

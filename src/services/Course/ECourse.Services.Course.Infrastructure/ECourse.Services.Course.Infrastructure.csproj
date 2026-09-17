@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Persistence\Repositories\BaseRepository.cs" />
+    <Compile Remove="Persistence\Repositories\IBaseRepository.cs" />
+  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.18" />	
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.10" />	
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.*" />
+		<PackageReference Include="NUnit" Version="4.3.2" />
+		<PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.0.2" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.18" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.18">
+			<PrivateAssets>anyType</PrivateAssets>
+			<IncludeAssets>runtime; build; native;contentfiles;analyzers;buildtransitive</IncludeAssets>
+		</PackageReference>						 
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Messaging\Outbox\" />
+	  <Folder Include="Persistence\Migrations\" />
+	  <Folder Include="Persistence\Interceptors\" />
+	</ItemGroup>	
+	<ItemGroup>
+		<InternalsVisibleTo Include="ECourse.Services.Course.Infrastructure.IntegrationTests" />
+	</ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\ECourse.Services.Course.Application\ECourse.Services.Course.Application.csproj" />
+	  <ProjectReference Include="..\ECourse.Services.Course.Domain\ECourse.Services.Course.Domain.csproj" />
+	</ItemGroup>
+</Project>

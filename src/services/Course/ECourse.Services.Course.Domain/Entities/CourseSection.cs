@@ -1,0 +1,20 @@
+﻿
+using ECourse.Services.Course.Domain.Common;
+
+namespace ECourse.Services.Course.Domain.Entities
+{
+
+    public class CourseSection : AggregateRoot<Guid>
+    {
+        public static readonly string DocumentName = nameof(CourseSection);
+        /// <summary>
+        /// each course has multiple sections for example part 1, part 2, ...
+        /// </summary>
+        public required int CourseId { get; set; }
+        /// <summary>
+        /// each section has title
+        /// </summary>
+        public required string Title { get; set; }
+        public List<CourseItem> CourseItems = null!;      
+    }
+}
