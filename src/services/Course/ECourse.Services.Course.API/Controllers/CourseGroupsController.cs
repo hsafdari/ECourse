@@ -49,11 +49,11 @@ public sealed class CourseGroupsController : ControllerBase
        return CreatedAtAction("GetById", new { id = response.Id }, response);
    
     }
-    [HttpGet("tree/{parentId:guid?}")]
+    [HttpGet("tree")]
     [ProducesResponseType(typeof(CourseGroupTreeResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<IReadOnlyList<CourseGroupTreeResponse>>> GetTreeAsync(Guid? parentId, CancellationToken cancellationToken)
+    public async Task<ActionResult<IReadOnlyList<CourseGroupTreeResponse>>> GetTreeAsync(Guid? parentId =null, CancellationToken cancellationToken=default)
     {
         GetCourseGroupsByParentIdQuery query = new(parentId);
         IReadOnlyList<CourseGroupTreeResponse> courseGroups = await _sender.Send(query, cancellationToken);

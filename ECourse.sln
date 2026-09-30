@@ -53,6 +53,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Services.Course.API
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Services.Course.Infrastructure.IntegrationTests", "tests\services\Course\ECourse.Services.Course.Infrastructure.IntegrationTests\ECourse.Services.Course.Infrastructure.IntegrationTests.csproj", "{2328C831-E88E-3E43-90D9-7932C67EE56F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "observability", "observability", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		observability\otel-collector-config.yml = observability\otel-collector-config.yml
+		observability\prometheus.yml = observability\prometheus.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECourse.Shared.Observability", "src\shared\ECourse.Shared.Observability\ECourse.Shared.Observability.csproj", "{4C098ECC-3F2F-4426-B7BC-A46DD3E4F316}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{8102E043-C2B1-4923-9F08-23E44BE17854}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -123,6 +133,10 @@ Global
 		{2328C831-E88E-3E43-90D9-7932C67EE56F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2328C831-E88E-3E43-90D9-7932C67EE56F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2328C831-E88E-3E43-90D9-7932C67EE56F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C098ECC-3F2F-4426-B7BC-A46DD3E4F316}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C098ECC-3F2F-4426-B7BC-A46DD3E4F316}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C098ECC-3F2F-4426-B7BC-A46DD3E4F316}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C098ECC-3F2F-4426-B7BC-A46DD3E4F316}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -150,6 +164,8 @@ Global
 		{C58AB8B0-F69B-3EA2-33C8-B1DF34DEDF89} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{3428928B-36B3-493B-9E86-3A0B447AEF73} = {15963199-DD34-4E20-BC79-8460A7B6D630}
 		{2328C831-E88E-3E43-90D9-7932C67EE56F} = {15963199-DD34-4E20-BC79-8460A7B6D630}
+		{4C098ECC-3F2F-4426-B7BC-A46DD3E4F316} = {8102E043-C2B1-4923-9F08-23E44BE17854}
+		{8102E043-C2B1-4923-9F08-23E44BE17854} = {7A66FF78-025E-4439-AC2D-C188CF018DC7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4D60EC64-0F4F-460A-939D-95BE6E47E38F}

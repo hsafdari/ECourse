@@ -1,8 +1,16 @@
 using ECourse.Services.Course.API.ExceptionHandling;
 using ECourse.Services.Course.Application;
+using ECourse.Services.Course.Application.Observability;
 using ECourse.Services.Course.Infrastructure;
 using Scalar.AspNetCore;
+using ECourse.Shared.Observability;
+using System.Reflection;
 
+var assembly = Assembly.GetExecutingAssembly();
+
+string serviceVersion =
+    assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?
+        .InformationalVersion ?? "1.0.0";
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -22,6 +30,11 @@ builder.Services
     .AddInfrastructure(builder.Configuration);
 
 
+builder.Services.AddECourseObservability(builder.Configuration,
+                                        builder.Environment.EnvironmentName,
+                                        CourseTelemetry.ServiceName,
+                                        CourseTelemetry.ActivitySourceName,
+                                        serviceVersion);
 
 WebApplication app = builder.Build();
 
@@ -36,12 +49,16 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 app.Run();
+/*
+ * Print the environment and connection string to the console for debugging purposes.
+ 
 var environment = builder.Environment.EnvironmentName;
 
 var connectionString =
     builder.Configuration.GetConnectionString("CourseDatabase");
 Console.WriteLine($"Environment: {environment}");
 Console.WriteLine($"CourseDatabase: {connectionString}");
+*/
 public partial class Program
 {
 }

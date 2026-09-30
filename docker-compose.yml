@@ -36,6 +36,42 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+  # ========================================
+  # OpenTelemetry Collector
+  # ========================================
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib:latest
+    container_name: ecourse-otel-collector
+    command:
+      - "--config=/etc/otelcol/config.yml"
+    volumes:
+      - ./observability/otel-collector-config.yml:/etc/otelcol/config.yml:ro
+    ports:
+      - "4317:4317"
+      - "4318:4318"
+      - "8889:8889"
 
+  jaeger:
+    image: cr.jaegertracing.io/jaegertracing/jaeger:2.21.0
+    container_name: ecourse-jaeger
+    ports:
+      - "16686:16686"
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: ecourse-prometheus
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    ports:
+      - "9090:9090"
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: ecourse-grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-data:/var/lib/grafana
 volumes:
   course-database-data:
+  grafana-data:

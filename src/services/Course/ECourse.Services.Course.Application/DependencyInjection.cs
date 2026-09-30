@@ -1,4 +1,4 @@
-﻿using ECourse.Services.Course.Application.Common.Behaviors;
+using ECourse.Services.Course.Application.Common.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
 
@@ -10,7 +10,7 @@ namespace ECourse.Services.Course.Application
         {            
             services.AddMediatR(configuration => {
                 configuration.RegisterServicesFromAssembly(ApplicationAssemblyReference.Assembly);
-
+                configuration.AddOpenBehavior(typeof(TracingBehavior<,>));
                 configuration.AddOpenBehavior(typeof(ValidationBehavior<,>));
             });
 
